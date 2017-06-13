@@ -20,7 +20,7 @@ server.post("/", function(req, res) {
   }
   function permsRequest (app) {
     console.log("got in func???");
-    app.tell("webhook works!!!");
+    app.ask("webhook works!!!");
     // const permission = app.SupportedPermissions.NAME;
     // app.askForPermission("To link your device to your Google Chrome browser", permission);
   }
