@@ -3,7 +3,8 @@
 process.env.DEBUG = "actions-on-google:*";
 const App = require("actions-on-google").ApiAiApp;
 const express = require("express");
-var GoogleStrategy = require('passport-google-oauth2').Strategy;
+const passport = require("passport");
+const GoogleStrategy = require('passport-google-oauth2').Strategy;
 
 var server = express();
 // [START YourAction]

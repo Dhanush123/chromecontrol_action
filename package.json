@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "express": "^4.15.3",
+    "passport": "^0.3.2",
     "passport-google-oauth2": "^0.1.6"
   },
   "devDependencies": {},
