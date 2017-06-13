@@ -3,8 +3,10 @@
 process.env.DEBUG = "actions-on-google:*";
 const App = require("actions-on-google").ApiAiApp;
 const express = require("express");
+const bodyParser = require('body-parser');
 
 var server = express();
+server.use(bodyParser.json());
 // [START YourAction]
 server.post("/", function(req, res) {
   const app = new App({req, res});
