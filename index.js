@@ -15,8 +15,9 @@ server.post("/", function(req, res) {
 
   // Fulfill action business logic
   function permsRequest (app) {
-    const permission = app.SupportedPermissions.NAME;
-    app.askForPermission("To link your device to your Google Chrome browser", permission);
+    app.tell("webhook works!!!");
+    // const permission = app.SupportedPermissions.NAME;
+    // app.askForPermission("To link your device to your Google Chrome browser", permission);
   }
 
   const actionMap = new Map();
