@@ -4,7 +4,8 @@
   "description": "chrome control actions for google",
   "main": "index.js",
   "dependencies": {
-    "express": "^4.15.3"
+    "express": "^4.15.3",
+    "passport-google-oauth2": "^0.1.6"
   },
   "devDependencies": {},
   "scripts": {
