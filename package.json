@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "chrome control actions for google",
   "main": "index.js",
-  "dependencies": {},
+  "dependencies": {
+    "express": "^4.15.3"
+  },
   "devDependencies": {},
   "scripts": {
     "start": "node index.js",
