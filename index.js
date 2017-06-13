@@ -16,7 +16,7 @@ server.post("/", function(req, res) {
   console.log("req.body.result.action == permsaction ? " + (req.body.result.action == "permsaction"));
   // Fulfill action business logic
   if(req.body.result.action == "permsaction"){
-    permsaction(app);
+    permsRequest(app);
   }
   function permsRequest (app) {
     console.log("got in func???");
@@ -24,7 +24,7 @@ server.post("/", function(req, res) {
     // const permission = app.SupportedPermissions.NAME;
     // app.askForPermission("To link your device to your Google Chrome browser", permission);
   }
-  // 
+  //
   // const actionMap = new Map();
   // actionMap.set("permsaction", permsRequest);
   //
