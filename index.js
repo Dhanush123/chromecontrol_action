@@ -45,6 +45,6 @@ server.get("auth/google/failure",function(){
   console.log("login failure!!!!");
 });
 
-server.listen(8000, function() {
+server.listen(process.env.PORT || 8000, function() {
   console.log("Server listening");
 });
