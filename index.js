@@ -10,12 +10,11 @@ var server = express();
 // [START YourAction]
 server.post("/", function(req, res) {
   const app = new App({req, res});
-  console.log("Request headers: " + JSON.stringify(request.headers));
-  console.log("Request body: " + JSON.stringify(request.body));
+  console.log("Request headers: " + JSON.stringify(req.headers));
+  console.log("Request body: " + JSON.stringify(req.body));
 
   // Fulfill action business logic
   function permsRequest (app) {
-    console
     const permission = app.SupportedPermissions.NAME;
     app.askForPermission("To link your device to your Google Chrome browser", permission);
   }
