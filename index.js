@@ -12,7 +12,8 @@ server.post("/", function(req, res) {
   const app = new App({req, res});
   console.log("Request headers: " + JSON.stringify(req.headers));
   console.log("Request body: " + JSON.stringify(req.body));
-
+  console.log("req.body.result.action" + req.body.result.action);
+    console.log("req.body.result.action == permsaction ? " + (req.body.result.action == "permsaction"));
   // Fulfill action business logic
   function permsRequest (app) {
     app.tell("webhook works!!!");
