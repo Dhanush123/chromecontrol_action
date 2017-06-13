@@ -12,10 +12,11 @@ server.post("/", function(req, res) {
   const app = new App({req, res});
   console.log("Request headers: " + JSON.stringify(req.headers));
   console.log("Request body: " + JSON.stringify(req.body));
-  console.log("req.body.result.action" + req.body.result.action);
+  console.log("req.body.result.action: "  + req.body.result.action);
     console.log("req.body.result.action == permsaction ? " + (req.body.result.action == "permsaction"));
   // Fulfill action business logic
   function permsRequest (app) {
+    console.log("got in func???");
     app.tell("webhook works!!!");
     // const permission = app.SupportedPermissions.NAME;
     // app.askForPermission("To link your device to your Google Chrome browser", permission);
