@@ -15,14 +15,16 @@ server.post("/", function(req, res) {
   console.log("Request body: " + JSON.stringify(req.body));
   console.log("req.body.result.action: "  + req.body.result.action);
   console.log("req.body.result.action == permsaction ? " + (req.body.result.action == "permsaction"));
-  let actionMap = new Map();
-  actionMap.set("permsaction", permsRequest);
-  app.handleRequest(actionMap);
 
   function permsRequest (app) {
     console.log("got in func???");
     app.tell("webhook works!!!");
   }
+
+  let actionMap = new Map();
+  actionMap.set("permsaction", permsRequest);
+  app.handleRequest(actionMap);
+
 });
 
 server.listen(process.env.PORT || 8000, function() {
