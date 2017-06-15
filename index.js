@@ -22,15 +22,15 @@ admin.initializeApp({
 });
 var db = admin.database();
 
-// var google = require('googleapis');
-// var plus = google.plus('v1');
-// var OAuth2 = google.auth.OAuth2;
-//
-// var oauth2Client = new OAuth2(
-//   process.env.GOOGLE_CLIENT_ID,
-//   process.env.GOOGLE_CLIENT_SECRET,
-//   process.env.GOOGLE_REDIRECT_URL
-// );
+var google = require('googleapis');
+var plus = google.plus('v1');
+var OAuth2 = google.auth.OAuth2;
+
+var oauth2Client = new OAuth2(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  process.env.GOOGLE_REDIRECT_URL
+);
 
 env('./.env');
 
@@ -41,29 +41,28 @@ exports.chromeControl = (request, response) => {
   console.log('Request body: ' + JSON.stringify(request.body));
 
   var user = app.getUser();
-  console.log("user: "+JSON.stringify(user));
 
-  var ref = db.ref("/users");
-  ref.once("value")
-  .then(function(snapshot) {
-    var hasAccount = snapshot.hasChild(user.emails.value);
-    if(!hasAccount){
-      ref.set({ name: user.displayName, email: user.emails.value });
-    }
+  oauth2Client.setCredentials({
+    access_token: user.accessToken
   });
 
-  // oauth2Client.setCredentials({
-  //   access_token: user.accessToken
-  // });
-  //
-  // plus.people.get({
-  // userId: 'me',
-  // auth: oauth2Client
-  // }, function (err, response) {
-  //   console.log("g+ err: " + JSON.stringify(err));
-  //   console.log("g+ response: " + JSON.stringify(response));
-  //   // handle err and response
-  // });
+  plus.people.get({
+  userId: 'me',
+  auth: oauth2Client
+  }, function (err, response) {
+    console.log("g+ err: " + JSON.stringify(err));
+    console.log("g+ response: " + JSON.stringify(response));
+    var gUser = JSON.parse(response);
+    var ref = db.ref("/users");
+    ref.once("value")
+    .then(function(snapshot) {
+      var hasAccount = snapshot.hasChild(gUser.emails.value);
+      if(!hasAccount){
+        ref.set({ name: gUser.displayName, email: gUser.emails.value });
+      }
+    });
+    // handle err and response
+  });
 
   // Fulfill action business logic
   function responseHandler1 (app) {
