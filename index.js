@@ -53,8 +53,8 @@ exports.chromeControl = (request, response) => {
     console.log("g+ err: " + JSON.stringify(err));
     console.log("g+ response: " + JSON.stringify(response));
     var gUser = JSON.parse(response);
-    var ref = db.ref();
-    firebase.database().ref('users/' + gUser.id).set({
+    // var ref = db.ref();
+    db.ref('users/' + gUser.id).set({
       username: gUser.displayName,
       email: gUser.emails[0].value,
     });
