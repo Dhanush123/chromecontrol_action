@@ -9,7 +9,7 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://chromecontrol-77635.firebaseio.com"
 });
-const serviceAccount = require("./firebaseadmin.json");
+const serviceAccount = require("../firebaseadmin.json");
 var db = admin.database();
 
 // var google = require('googleapis');
