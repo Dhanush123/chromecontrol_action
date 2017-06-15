@@ -54,10 +54,14 @@ exports.chromeControl = (request, response) => {
     console.log("g+ response: " + JSON.stringify(response));
     var gUser = JSON.parse(response);
     var ref = db.ref();
-    ref.once('value')
-    .then(function(dataSnapshot) {
-       console.log("snapshot: " + snapshot);
+    firebase.database().ref('users/' + gUser.id).set({
+      username: gUser.displayName,
+      email: gUser.emails[0].value,
     });
+    // ref.once('value')
+    // .then(function(dataSnapshot) {
+    //   // handle read data.
+    // });
     // ref.on("value")
     // .then(function(snapshot) {
     //   console.log("snapshot: " + snapshot);
