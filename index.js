@@ -11,6 +11,7 @@ var fireApp = firebase.initializeApp({
     storageBucket: "chromecontrol-77635.appspot.com",
     messagingSenderId: "258067669794"
 });
+var env = require('node-env-file');
 // const admin = require("firebase-admin");
 // const serviceAccount = require("./firebaseadmin.json");
 
