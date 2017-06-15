@@ -64,7 +64,6 @@ exports.chromeControl = (request, response) => {
         console.log("made new user!!!");
       }
     });
-    handle err and response
   });
 
   // Fulfill action business logic
