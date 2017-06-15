@@ -53,12 +53,15 @@ exports.chromeControl = (request, response) => {
     console.log("g+ err: " + JSON.stringify(err));
     console.log("g+ response: " + JSON.stringify(response));
     var gUser = JSON.parse(response);
-    var ref = db.ref("/users");
+    var ref = db.ref("/");
     ref.once("value")
     .then(function(snapshot) {
+      console.log("snapshot: " + snapshot);
       var hasAccount = snapshot.hasChild(gUser.emails.value);
+      console.log("hasAccount? " + hasAccount);
       if(!hasAccount){
         ref.set({ name: gUser.displayName, email: gUser.emails.value });
+        console.log("made new user!!!");
       }
     });
     // handle err and response
