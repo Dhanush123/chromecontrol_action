@@ -25,7 +25,7 @@ var env = require('node-env-file');
 //   process.env.GOOGLE_REDIRECT_URL
 // );
 
-env(__dirname + '/.env');
+env('./.env');
 
 // [START YourAction]
 exports.chromeControl = (request, response) => {
