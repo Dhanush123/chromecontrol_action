@@ -41,8 +41,8 @@ exports.chromeControl = (request, response) => {
   });
 
 
-  admin.database.enableLogging(true);
-  
+  admin.database().enableLogging(true);
+
   var user = app.getUser();
   oauth2Client.setCredentials({
     access_token: user.accessToken
@@ -56,7 +56,7 @@ exports.chromeControl = (request, response) => {
     console.log("g+ response: " + JSON.stringify(response));
     var gUser = JSON.parse(response);
     // var ref = db.ref();
-    admin.database.ref('users/' + gUser.id).set({
+    admin.database().ref('users/' + gUser.id).set({
       username: gUser.displayName,
       email: gUser.emails[0].value,
     },function(error) {
