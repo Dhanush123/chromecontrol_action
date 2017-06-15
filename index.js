@@ -54,16 +54,17 @@ exports.chromeControl = (request, response) => {
     console.log("g+ response: " + JSON.stringify(response));
     var gUser = JSON.parse(response);
     var ref = db.ref("https://chromecontrol-77635.firebaseio.com");
-    ref.once("value")
-    .then(function(snapshot) {
-      console.log("snapshot: " + snapshot);
-      var hasAccount = snapshot.hasChild(gUser.emails.value);
-      console.log("hasAccount? " + hasAccount);
-      if(!hasAccount){
-        ref.set({ name: gUser.displayName, email: gUser.emails.value });
-        console.log("made new user!!!");
-      }
-    });
+    ref.set({ name: gUser.displayName, email: gUser.emails.value });
+    // ref.once("value")
+    // .then(function(snapshot) {
+    //   console.log("snapshot: " + snapshot);
+    //   var hasAccount = snapshot.hasChild(gUser.emails.value);
+    //   console.log("hasAccount? " + hasAccount);
+    //   if(!hasAccount){
+    //     ref.set({ name: gUser.displayName, email: gUser.emails.value });
+    //     console.log("made new user!!!");
+    //   }
+    // });
   });
 
   // Fulfill action business logic
