@@ -5,13 +5,14 @@
   "main": "index.js",
   "dependencies": {
     "actions-on-google": "^1.1.1",
-    "body-parser": "^1.17.2",
-    "express": "^4.15.3"
+    "firebase-admin": "^5.0.0",
+    "googleapis": "^19.0.0",
+    "node-env-file": "^0.1.8"
   },
   "devDependencies": {},
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "functions deploy chromeControl --trigger-http",
+    "deploy": "gcloud beta functions deploy chromeControl --trigger-http --stage-bucket staging.chromecontrol-77635.appspot.com"
   },
   "author": "dhanush patel",
   "license": "ISC"
