@@ -40,6 +40,9 @@ exports.chromeControl = (request, response) => {
     databaseURL: "https://chromecontrol-77635.firebaseio.com"
   });
 
+
+  admin.database.enableLogging(true);
+  
   var user = app.getUser();
   oauth2Client.setCredentials({
     access_token: user.accessToken
