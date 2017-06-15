@@ -2,25 +2,29 @@
 
 process.env.DEBUG = 'actions-on-google:*';
 const App = require('actions-on-google').ApiAiApp;
-const admin = require("firebase-admin");
-const serviceAccount = require("./firebaseadmin.json");
-//dsfsdfs
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: process.env.FIREBASE_URL
+var firebase = require('firebase');
+var fireApp = firebase.initializeApp({
+    apiKey: "AIzaSyAkpiEWoAPAca8MsXv26oZPflZWlHABc0I",
+    authDomain: "chromecontrol-77635.firebaseapp.com",
+    databaseURL: "https://chromecontrol-77635.firebaseio.com",
+    projectId: "chromecontrol-77635",
+    storageBucket: "chromecontrol-77635.appspot.com",
+    messagingSenderId: "258067669794"
 });
+// const admin = require("firebase-admin");
+// const serviceAccount = require("./firebaseadmin.json");
 
-var google = require('googleapis');
-var plus = google.plus('v1');
-var OAuth2 = google.auth.OAuth2;
+// var google = require('googleapis');
+// var plus = google.plus('v1');
+// var OAuth2 = google.auth.OAuth2;
+//
+// var oauth2Client = new OAuth2(
+//   process.env.GOOGLE_CLIENT_ID,
+//   process.env.GOOGLE_CLIENT_SECRET,
+//   process.env.GOOGLE_REDIRECT_URL
+// );
 
-var oauth2Client = new OAuth2(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_REDIRECT_URL
-);
-
- env(__dirname + '/.env');
+env(__dirname + '/.env');
 
 // [START YourAction]
 exports.chromeControl = (request, response) => {
@@ -31,18 +35,33 @@ exports.chromeControl = (request, response) => {
   var user = app.getUser();
   console.log("user: "+JSON.stringify(user));
 
-  oauth2Client.setCredentials({
-    access_token: user.accessToken
-  });
+  // Build Firebase credential with the Google ID token.
+  var credential = firebase.auth.GoogleAuthProvider.credential(user.accessToken);
 
-  plus.people.get({
-  userId: 'me',
-  auth: oauth2Client
-  }, function (err, response) {
-    console.log("g+ err: " + JSON.stringify(err));
-    console.log("g+ response: " + JSON.stringify(response));
-    // handle err and response
+  // Sign in with credential from the Google user.
+  firebase.auth().signInWithCredential(credential).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // The email of the user's account used.
+    var email = error.email;
+    // The firebase.auth.AuthCredential type that was used.
+    var credential = error.credential;
+    console.log("firebase returned...: " + JSON.stringify(error));
+    // ...
   });
+  // oauth2Client.setCredentials({
+  //   access_token: user.accessToken
+  // });
+  //
+  // plus.people.get({
+  // userId: 'me',
+  // auth: oauth2Client
+  // }, function (err, response) {
+  //   console.log("g+ err: " + JSON.stringify(err));
+  //   console.log("g+ response: " + JSON.stringify(response));
+  //   // handle err and response
+  // });
 
   // Fulfill action business logic
   function responseHandler1 (app) {
