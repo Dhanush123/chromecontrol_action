@@ -5,11 +5,11 @@ const App = require('actions-on-google').ApiAiApp;
 var env = require('node-env-file');
 
 const admin = require("firebase-admin");
+const serviceAccount = require("../firebaseadmin.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://chromecontrol-77635.firebaseio.com"
 });
-const serviceAccount = require("../firebaseadmin.json");
 var db = admin.database();
 
 // var google = require('googleapis');
