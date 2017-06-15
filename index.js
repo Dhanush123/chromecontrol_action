@@ -53,18 +53,22 @@ exports.chromeControl = (request, response) => {
     console.log("g+ err: " + JSON.stringify(err));
     console.log("g+ response: " + JSON.stringify(response));
     var gUser = JSON.parse(response);
-    var ref = db.ref("");
-    ref.on("value")
-    .then(function(snapshot) {
-      console.log("snapshot: " + snapshot);
-      var hasAccount = snapshot.hasChild(gUser.id);
-      console.log("hasAccount? " + hasAccount);
-      if(!hasAccount){
-        var newRef = db.ref("/"+gUser.id);
-        newRef.set({ name: gUser.displayName, email: gUser.emails.value });
-        console.log("made new user!!!");
-      }
+    var ref = db.ref();
+    ref.once('value')
+    .then(function(dataSnapshot) {
+       console.log("snapshot: " + snapshot);
     });
+    // ref.on("value")
+    // .then(function(snapshot) {
+    //   console.log("snapshot: " + snapshot);
+    //   var hasAccount = snapshot.hasChild(gUser.id);
+    //   console.log("hasAccount? " + hasAccount);
+    //   if(!hasAccount){
+    //     var newRef = db.ref("/"+gUser.id);
+    //     newRef.set({ name: gUser.displayName, email: gUser.emails.value });
+    //     console.log("made new user!!!");
+    //   }
+    // });
   });
 
   // Fulfill action business logic
