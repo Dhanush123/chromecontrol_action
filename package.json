@@ -5,7 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "actions-on-google": "^1.1.1",
-    "firebase": "^4.1.2",
     "firebase-admin": "^5.0.0",
     "googleapis": "^19.0.0",
     "node-env-file": "^0.1.8"
