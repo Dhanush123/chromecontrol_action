@@ -31,6 +31,7 @@ exports.chromeControl = (request, response) => {
     access_token: user.accessToken
   });
   
+  var fbDB;
   if(admin.apps.length == 0) {
     console.log("should initialize firebase now...");
     admin.initializeApp({
@@ -48,23 +49,56 @@ exports.chromeControl = (request, response) => {
       }),
       databaseURL: "https://chromecontrol-77635.firebaseio.com"
     });
+    fbDB = admin.database();
   }
 
-  plus.people.get({
-  userId: 'me',
-  auth: oauth2Client
-  }, function (err, response) {
-    console.log("g+ err: " + JSON.stringify(err));
-    console.log("g+ response: " + JSON.stringify(response));
-    // var gUser = JSON.parse(response);
-    console.log("response.displayName: "+response.displayName);
-    console.log("response.emails[0].value: "+response.emails[0].value);
-    admin.database().ref('users/' + response.id).set({
-        username: response.displayName,
-        email: response.emails[0].value
-    });
-  });
+  var gUser;
+  getGUser(checkUserInFB);
   
+  function getGUser(opFunc){
+    plus.people.get({
+      userId: 'me',
+      auth: oauth2Client
+      }, function (err, res) {
+        console.log("g+ err: " + JSON.stringify(err));
+        console.log("g+ res: " + JSON.stringify(res));
+        gUser = res;
+        console.log("gUser.displayName: "+gUser.displayName);
+        console.log("gUser.emails[0].value: "+gUser.emails[0].value);
+        if(typeof opFunc === "function"){
+          opFunc();
+        }
+    });
+  }
+  
+  function checkUserInFB(){
+    var ref = fbDB.ref('users');
+    ref.on("value", function(snapshot) {
+      console.log("snapshot: " + JSON.stringify(snapshot.val()));
+      if(!snapshot.val()[gUser.id]){
+        fbCreateUser();
+      }
+      else{
+        console.log("user already exists in Firebase");
+      }
+    }, function (errorObject) {
+      console.log("Firebase user read failed: " + errorObject.code);
+    });
+  }
+  
+  function fbCreateUser(){
+    var ref = fbDB.ref("users/"+gUser.id);
+    ref.set({
+      username: gUser.displayName,
+      email: gUser.emails[0].value,
+      chromeLoggedIn: false 
+    });
+    console.log("created new user in Firebase");
+  }
+  
+  function checkChromeStatus(){
+
+  }
 
   // Fulfill action business logic
   function responseHandler1 (app) {
