@@ -54,12 +54,12 @@ exports.chromeControl = (request, response) => {
   }, function (err, response) {
     console.log("g+ err: " + JSON.stringify(err));
     console.log("g+ response: " + JSON.stringify(response));
-    var gUser = JSON.parse(response);
-    console.log("gUser.displayName: "+gUser.displayName);
-    console.log("gUser.emails[0].value: "+gUser.emails[0].value);
-    admin.database().ref('users/' + gUser.id).set({
-        username: gUser.displayName,
-        email: gUser.emails[0].value
+    // var gUser = JSON.parse(response);
+    console.log("response.displayName: "+response.displayName);
+    console.log("response.emails[0].value: "+response.emails[0].value);
+    admin.database().ref('users/' + response.id).set({
+        username: response.displayName,
+        email: response.emails[0].value
     });
   });
 
