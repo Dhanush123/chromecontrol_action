@@ -18,7 +18,7 @@ var oauth2Client = new OAuth2(
 
 env('./.env');
 
-if (firebase.apps.length === 0) {
+if (admin.apps.length === 0) {
   console.log("should initialize firebase now...");
   admin.initializeApp({
     credential: admin.credential.cert({
