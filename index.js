@@ -6,7 +6,7 @@ var env = require('node-env-file');
 
 // const admin = require("firebase-admin");
 var firebase = require('firebase');
-var app = firebase.initializeApp({
+firebase.initializeApp({
    apiKey: "AIzaSyAkpiEWoAPAca8MsXv26oZPflZWlHABc0I",
    authDomain: "chromecontrol-77635.firebaseapp.com",
    databaseURL: "https://chromecontrol-77635.firebaseio.com",
@@ -65,7 +65,7 @@ exports.chromeControl = (request, response) => {
     console.log("g+ response: " + JSON.stringify(response));
     var gUser = JSON.parse(response);
     // var ref = db.ref();
-    app.database().ref('users/' + gUser.id).set({
+    firebase.database().ref('users/' + gUser.id).set({
         username: gUser.displayName,
         email: gUser.emails[0].value
     });
