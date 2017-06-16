@@ -82,7 +82,7 @@ exports.chromeControl = (request, response) => {
         console.log("user already exists in Firebase");
       }
     }, function (errorObject) {
-      console.log("Firebase user read failed: " + errorObject.code);
+      console.log("Firebase user (creation) read failed: " + errorObject.code);
     });
   }
   
@@ -97,13 +97,29 @@ exports.chromeControl = (request, response) => {
   }
   
   function checkChromeStatus(){
-
+    var ref = fbDB.ref('users');
+    ref.on("value", function(snapshot) {
+      console.log("snapshot: " + JSON.stringify(snapshot.val()));
+      console.log("snapshot.val()["+gUser.id+"].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
+      if(snapshot.val()[gUser.id].chromeLoggedIn){
+        return true;
+      }
+      else{
+        return false;
+      }
+    }, function (errorObject) {
+      console.log("Firebase user (read) read failed: " + errorObject.code);
+    });
   }
 
-  // Fulfill action business logic
   function responseHandler1 (app) {
-    // Complete your fulfillment logic and send a response
-    app.ask('Hello, World!');
+    var chrome = checkChromeStatus();
+    if(chrome){
+      app.ask("Hello, World! You're logged in!");
+    }
+    else{
+      app.ask("Hello, World! You're not logged in!");
+    }
   }
 
   const actionMap = new Map();
