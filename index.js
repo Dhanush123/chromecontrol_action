@@ -60,7 +60,7 @@ exports.chromeControl = (request, response) => {
     var gUser = JSON.parse(response);
     console.log("gUser.displayName: "+gUser.displayName);
     console.log("gUser.emails[0].value: "+gUser.emails[0].value);
-    firebase.database().ref('users/' + gUser.id).set({
+    admin.database().ref('users/' + gUser.id).set({
         username: gUser.displayName,
         email: gUser.emails[0].value
     });
