@@ -34,7 +34,11 @@ exports.chromeControl = (request, response) => {
     access_token: user.accessToken
   });
 
+  var gUser;
   var fbDB;
+  var gRef;
+  var ref;
+  
   if (admin.apps.length == 0) {
     console.log("should initialize firebase now...");
     admin.initializeApp({
@@ -53,12 +57,10 @@ exports.chromeControl = (request, response) => {
       databaseURL: "https://chromecontrol-77635.firebaseio.com"
     });
     fbDB = admin.database();
+    ref = fbDB.ref("users");
   }
 
-  var gUser;
   getGUser(checkUserInFB);
-  var gRef;
-  var ref = fbDB.ref('users');
 
   function getGUser(opFunc) {
     plus.people.get({
