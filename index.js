@@ -2,11 +2,11 @@
 
 process.env.DEBUG = 'actions-on-google:*';
 const App = require('actions-on-google').ApiAiApp;
-var env = require('node-env-file');
+const env = require('node-env-file');
 
 const admin = require("firebase-admin");
 
-var google = require('googleapis');
+const google = require('googleapis');
 var plus = google.plus('v1');
 var OAuth2 = google.auth.OAuth2;
 
@@ -20,7 +20,10 @@ env('./.env');
 
 // [START YourAction]
 exports.chromeControl = (request, response) => {
-  const app = new App({request, response});
+  const app = new App({
+    request,
+    response
+  });
   console.log('Request headers: ' + JSON.stringify(request.headers));
   console.log('Request body: ' + JSON.stringify(request.body));
 
@@ -30,9 +33,9 @@ exports.chromeControl = (request, response) => {
   oauth2Client.setCredentials({
     access_token: user.accessToken
   });
-  
+
   var fbDB;
-  if(admin.apps.length == 0) {
+  if (admin.apps.length == 0) {
     console.log("should initialize firebase now...");
     admin.initializeApp({
       credential: admin.credential.cert({
@@ -54,77 +57,129 @@ exports.chromeControl = (request, response) => {
 
   var gUser;
   getGUser(checkUserInFB);
-  
-  function getGUser(opFunc){
+  var gRef;
+  var ref = fbDB.ref('users');
+
+  function getGUser(opFunc) {
     plus.people.get({
       userId: 'me',
       auth: oauth2Client
-      }, function (err, res) {
-        console.log("g+ err: " + JSON.stringify(err));
-        console.log("g+ res: " + JSON.stringify(res));
-        gUser = res;
-        console.log("gUser.displayName: "+gUser.displayName);
-        console.log("gUser.emails[0].value: "+gUser.emails[0].value);
-        if(typeof opFunc === "function"){
-          opFunc();
-        }
+    }, function(err, res) {
+      console.log("g+ err: " + JSON.stringify(err));
+      console.log("g+ res: " + JSON.stringify(res));
+      gUser = res;
+      console.log("gUser.displayName: " + gUser.displayName);
+      console.log("gUser.emails[0].value: " + gUser.emails[0].value);
+      gRef = fbDB.ref("users/" + gUser.id);
+      if (typeof opFunc === "function") {
+        opFunc();
+      }
     });
   }
-  
-  function checkUserInFB(){
-    var ref = fbDB.ref('users');
+
+  function checkUserInFB() {
     ref.on("value", function(snapshot) {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
-      if(!snapshot.val()[gUser.id]){
+      if (!snapshot.val()[gUser.id]) {
         fbCreateUser();
-      }
-      else{
+      } else {
         console.log("user already exists in Firebase");
       }
-    }, function (errorObject) {
+    }, function(errorObject) {
       console.log("Firebase user (creation) read failed: " + errorObject.code);
     });
   }
-  
-  function fbCreateUser(){
-    var ref = fbDB.ref("users/"+gUser.id);
-    ref.set({
+
+  function fbCreateUser() {
+    gRef.set({
       username: gUser.displayName,
       email: gUser.emails[0].value,
-      chromeLoggedIn: false 
+      chromeLoggedIn: false,
+      command: "none"
     });
     console.log("created new user in Firebase");
   }
-  
-  function checkChromeStatus(){
-    var ref = fbDB.ref('users');
+
+  function checkChromeStatus() {
     ref.on("value", function(snapshot) {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
-      console.log("snapshot.val()["+gUser.id+"].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
-      if(snapshot.val()[gUser.id].chromeLoggedIn){
-        return true;
+      console.log("snapshot.val()[" + gUser.id + "].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
+      if (!snapshot.val()[gUser.id].chromeLoggedIn) {
+        app.tell("Hey! It seems like you haven't installed the \"Chrome Control\" Chrome Extension in your Google Chrome Browser yet. Can you come back after you've done that? U+1F642");
       }
-      else{
-        return false;
-      }
-    }, function (errorObject) {
+    }, function(errorObject) {
       console.log("Firebase user (read) read failed: " + errorObject.code);
     });
   }
 
-  function responseHandler1 (app) {
-    var chrome = checkChromeStatus();
-    if(chrome){
-      app.ask("Hello, World! You're logged in!");
-    }
-    else{
-      app.ask("Hello, World! You're not logged in!");
-    }
+  function testFunc(app) {
+    app.ask("Wow, you found the developer test function. Lucky you!");
+    //    var chrome = checkChromeStatus();
+    //    if(chrome){
+    //      app.ask("Hello, World! You're logged in!");
+    //    }
+    //    else{
+    //      app.ask("Hello, World! You're not logged in!"); //CHANGE THIS MESSAGE LATER
+    //    }
+  }
+
+  function closeTab(app) {
+    app.ask("Closing tab! Let me know if you want me to do anything else.");
+    checkChromeStatus();
+    gRef.update({
+      "command": "close_tab"
+    });
+  }
+
+  function goBack(app) {
+    app.ask("Going back! Let me know if you want me to do anything else.");
+    checkChromeStatus();
+    gRef.update({
+      "command": "go_back"
+    });
+  }
+
+  function goForward(app) {
+    app.ask("Going forward! Let me know if you want me to do anything else.");
+    checkChromeStatus();
+    gRef.update({
+      "command": "go_forward"
+    });
+  }
+
+  function newTab(app) {
+    app.ask("Opening new tab! Let me know if you want me to do anything else.");
+    checkChromeStatus();
+    gRef.update({
+      "command": "new_tab"
+    });
+  }
+
+  function scrollDown(app) {
+    app.ask("Scrolling down! Let me know if you want me to do anything else.");
+    checkChromeStatus();
+    gRef.update({
+      "command": "scroll_down"
+    });
+  }
+
+  function scrollUp(app) {
+    app.ask("Scrolling up! Let me know if you want me to do anything else.");
+    checkChromeStatus();
+    gRef.update({
+      "command": "scroll_up"
+    });
   }
 
   const actionMap = new Map();
-  actionMap.set('heyhey', responseHandler1);
+  actionMap.set('test_func', testFunc);
+  actionMap.set('close_tab', closeTab);
+  actionMap.set('go_back', goBack);
+  actionMap.set('go_forward', goForward);
+  actionMap.set('new_tab', newTab);
+  actionMap.set('scroll_down', scrollDown);
+  actionMap.set('scroll_up', scrollUp);
 
   app.handleRequest(actionMap);
-};
+}
 // [END YourAction]
