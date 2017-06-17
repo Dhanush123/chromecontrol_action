@@ -116,7 +116,7 @@ exports.chromeControl = (request, response) => {
 
   function testFunc(app) {
     app.ask("Wow, you found the developer test function. Lucky you!");
-    //    var chrome = checkChromeStatus();
+    //    var chrome = getGUser(checkChromeStatus);
     //    if(chrome){
     //      app.ask("Hello, World! You're logged in!");
     //    }
@@ -127,7 +127,7 @@ exports.chromeControl = (request, response) => {
 
   function closeTab(app) {
     app.ask("Closing tab! Let me know if you want me to do anything else.");
-    checkChromeStatus();
+    getGUser(checkChromeStatus);
     gRef.update({
       "command": "close_tab"
     });
@@ -135,7 +135,7 @@ exports.chromeControl = (request, response) => {
 
   function goBack(app) {
     app.ask("Going back! Let me know if you want me to do anything else.");
-    checkChromeStatus();
+    getGUser(checkChromeStatus);
     gRef.update({
       "command": "go_back"
     });
@@ -143,7 +143,7 @@ exports.chromeControl = (request, response) => {
 
   function goForward(app) {
     app.ask("Going forward! Let me know if you want me to do anything else.");
-    checkChromeStatus();
+    getGUser(checkChromeStatus);
     gRef.update({
       "command": "go_forward"
     });
@@ -151,7 +151,7 @@ exports.chromeControl = (request, response) => {
 
   function newTab(app) {
     app.ask("Opening new tab! Let me know if you want me to do anything else.");
-    checkChromeStatus();
+    getGUser(checkChromeStatus);
     gRef.update({
       "command": "new_tab"
     });
@@ -159,7 +159,7 @@ exports.chromeControl = (request, response) => {
 
   function scrollDown(app) {
     app.ask("Scrolling down! Let me know if you want me to do anything else.");
-    checkChromeStatus();
+    getGUser(checkChromeStatus);
     gRef.update({
       "command": "scroll_down"
     });
@@ -167,7 +167,7 @@ exports.chromeControl = (request, response) => {
 
   function scrollUp(app) {
     app.ask("Scrolling up! Let me know if you want me to do anything else.");
-    checkChromeStatus();
+    getGUser(checkChromeStatus);
     gRef.update({
       "command": "scroll_up"
     });
