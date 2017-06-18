@@ -36,9 +36,7 @@ exports.chromeControl = (request, response) => {
 
   var gUser;
   var fbDB;
-  var gRef;
-  var ref;
-  
+
   if (admin.apps.length == 0) {
     console.log("should initialize firebase now...");
     admin.initializeApp({
@@ -57,7 +55,6 @@ exports.chromeControl = (request, response) => {
       databaseURL: "https://chromecontrol-77635.firebaseio.com"
     });
     fbDB = admin.database();
-    ref = fbDB.ref("users");
   }
 
   getGUser(checkUserInFB);
@@ -72,7 +69,7 @@ exports.chromeControl = (request, response) => {
       gUser = res;
       console.log("gUser.displayName: " + gUser.displayName);
       console.log("gUser.emails[0].value: " + gUser.emails[0].value);
-      gRef = fbDB.ref("users/" + gUser.id);
+      console.log("gUser.id: " + gUser.id);
       if (typeof opFunc === "function") {
         opFunc();
       }
@@ -80,6 +77,7 @@ exports.chromeControl = (request, response) => {
   }
 
   function checkUserInFB() {
+    var ref = fbDB.ref("users");
     ref.on("value", function(snapshot) {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
       if (!snapshot.val()[gUser.id]) {
@@ -93,6 +91,7 @@ exports.chromeControl = (request, response) => {
   }
 
   function fbCreateUser() {
+    var gRef = fbDB.ref("users/" + gUser.id);
     gRef.set({
       username: gUser.displayName,
       email: gUser.emails[0].value,
@@ -103,6 +102,7 @@ exports.chromeControl = (request, response) => {
   }
 
   function checkChromeStatus() {
+    var ref = fbDB.ref("users");
     ref.on("value", function(snapshot) {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
       console.log("snapshot.val()[" + gUser.id + "].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
@@ -116,18 +116,12 @@ exports.chromeControl = (request, response) => {
 
   function testFunc(app) {
     app.ask("Wow, you found the developer test function. Lucky you!");
-    //    var chrome = getGUser(checkChromeStatus);
-    //    if(chrome){
-    //      app.ask("Hello, World! You're logged in!");
-    //    }
-    //    else{
-    //      app.ask("Hello, World! You're not logged in!"); //CHANGE THIS MESSAGE LATER
-    //    }
   }
 
   function closeTab(app) {
     app.ask("Closing tab! Let me know if you want me to do anything else.");
     getGUser(checkChromeStatus);
+    var gRef = fbDB.ref("users/" + gUser.id);
     gRef.update({
       "command": "close_tab"
     });
@@ -136,6 +130,7 @@ exports.chromeControl = (request, response) => {
   function goBack(app) {
     app.ask("Going back! Let me know if you want me to do anything else.");
     getGUser(checkChromeStatus);
+    var gRef = fbDB.ref("users/" + gUser.id);
     gRef.update({
       "command": "go_back"
     });
@@ -144,6 +139,7 @@ exports.chromeControl = (request, response) => {
   function goForward(app) {
     app.ask("Going forward! Let me know if you want me to do anything else.");
     getGUser(checkChromeStatus);
+    var gRef = fbDB.ref("users/" + gUser.id);
     gRef.update({
       "command": "go_forward"
     });
@@ -152,6 +148,7 @@ exports.chromeControl = (request, response) => {
   function newTab(app) {
     app.ask("Opening new tab! Let me know if you want me to do anything else.");
     getGUser(checkChromeStatus);
+    var gRef = fbDB.ref("users/" + gUser.id);
     gRef.update({
       "command": "new_tab"
     });
@@ -160,6 +157,7 @@ exports.chromeControl = (request, response) => {
   function scrollDown(app) {
     app.ask("Scrolling down! Let me know if you want me to do anything else.");
     getGUser(checkChromeStatus);
+    var gRef = fbDB.ref("users/" + gUser.id);
     gRef.update({
       "command": "scroll_down"
     });
@@ -168,6 +166,7 @@ exports.chromeControl = (request, response) => {
   function scrollUp(app) {
     app.ask("Scrolling up! Let me know if you want me to do anything else.");
     getGUser(checkChromeStatus);
+    var gRef = fbDB.ref("users/" + gUser.id);
     gRef.update({
       "command": "scroll_up"
     });
