@@ -98,13 +98,19 @@ exports.chromeControl = (request, response) => {
     console.log("created new user in Firebase");
   }
 
-  function checkChromeStatus() {
+  function checkChromeStatus(opFunc) {
     var ref = admin.database().ref("users");
     ref.on("value", function(snapshot) {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
       console.log("snapshot.val()[" + gUser.id + "].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
       if (!snapshot.val()[gUser.id].chromeLoggedIn) {
         app.tell("Hey! It seems like you haven't installed the \"Chrome Control\" Chrome Extension in your Google Chrome Browser yet. Can you come back after you've done that? U+1F642");
+      }
+      else {
+        if (typeof opFunc === "function") {
+          console.log("executing order 66 :D")
+          opFunc();
+        }
       }
     }, function(errorObject) {
       console.log("Firebase user (read) read failed: " + errorObject.code);
@@ -116,49 +122,62 @@ exports.chromeControl = (request, response) => {
   }
 
   function closeTab(app) {
-    app.ask("Closing tab! Let me know if you want me to do anything else.");
-    getGUser(checkChromeStatus);
-    var gRef = admin.database().ref("users/" + gUser.id);
-    gRef.update({
-      "command": "close_tab"
-    },function(error) {
-      if (error) {
-        console.log("Data could not be saved: " + error);
-      } else {
-        app.ask("Closing tab! Let me know if you want me to do anything else.");
-      }
-    });
+    getGUser(checkChromeStatus(function() {
+      var gRef = admin.database().ref("users/" + gUser.id);
+      gRef.update({
+        "command": "close_tab"
+      },function(error) {
+        if (error) {
+          console.log("Data could not be saved: " + error);
+        } else {
+          app.ask("Closing tab! Let me know if you want me to do anything else.");
+        }
+      });
+    }));
   }
 
   function goBack(app) {
-    getGUser(checkChromeStatus);
-    var gRef = admin.database().ref("users/" + gUser.id);
-    gRef.update({
-      "command": "go_back"
-    },function(error) {
-      if (error) {
-        console.log("Data could not be saved: " + error);
-      } else {
-        app.ask("Going back! Let me know if you want me to do anything else.");
-      }
+    getGUser(checkChromeStatus, function(){
+      var gRef = admin.database().ref("users/" + gUser.id);
+      gRef.update({
+        "command": "go_back"
+      },function(error) {
+        if (error) {
+          console.log("Data could not be saved: " + error);
+        } else {
+          app.ask("Going back! Let me know if you want me to do anything else.");
+        }
+      });
     });
   }
 
   function goForward(app) {
-    app.ask("Going forward! Let me know if you want me to do anything else.");
-    getGUser(checkChromeStatus);
-    var gRef = admin.database().ref("users/" + gUser.id);
-    gRef.update({
-      "command": "go_forward"
+    getGUser(checkChromeStatus, function() {
+      var gRef = admin.database().ref("users/" + gUser.id);
+      gRef.update({
+        "command": "go_forward"
+      },function(error) {
+        if (error) {
+          console.log("Data could not be saved: " + error);
+        } else {
+          app.ask("Going forward! Let me know if you want me to do anything else.");
+        }
+      });
     });
   }
 
   function newTab(app) {
-    app.ask("Opening new tab! Let me know if you want me to do anything else.");
-    getGUser(checkChromeStatus);
-    var gRef = admin.database().ref("users/" + gUser.id);
-    gRef.update({
-      "command": "new_tab"
+    getGUser(checkChromeStatus, function() {
+      var gRef = admin.database().ref("users/" + gUser.id);
+      gRef.update({
+        "command": "new_tab"
+      },function(error) {
+        if (error) {
+          console.log("Data could not be saved: " + error);
+        } else {
+          app.ask("Opening new tab! Let me know if you want me to do anything else.");
+        }
+      });
     });
   }
 
