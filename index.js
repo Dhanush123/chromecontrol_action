@@ -20,13 +20,16 @@ env('./.env');
 
 // [START YourAction]
 exports.chromeControl = (request, response) => {
+  
+  var action = "";
   const app = new App({
     request,
     response
   });
   console.log('Request headers: ' + JSON.stringify(request.headers));
   console.log('Request body: ' + JSON.stringify(request.body));
-
+  console.log("api.ai action was: " + request.result.action);
+  action = request.result.action;
   var user = app.getUser();
   oauth2Client.setCredentials({
     access_token: user.accessToken
@@ -108,7 +111,6 @@ exports.chromeControl = (request, response) => {
     ref.on("value", function(snapshot) {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
       console.log("snapshot.val()[" + gUser.id + "].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
-      console.log("api.ai action was: " + request.result.action);
       if(!snapshot.val()[gUser.id].chromeLoggedIn){
         app.tell("Hey! It seems like you haven't installed the \"Chrome Control\" Chrome Extension in your Google Chrome Browser yet. Can you come back after you've done that? U+1F642");
       }
