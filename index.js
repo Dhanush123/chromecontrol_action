@@ -115,7 +115,38 @@ exports.chromeControl = (request, response) => {
         app.tell("Hey! It seems like you haven't installed the \"Chrome Control\" Chrome Extension in your Google Chrome Browser yet. Can you come back after you've done that? U+1F642");
       }
       else {
-        app.tell("Hey, you're logged in to Chrome!");
+         var gRef = admin.database().ref("users/" + gUser.id);
+//        app.tell("Hey, you're logged in to Chrome!");
+          gRef.update({
+            "command": action
+          },function(error) {
+            if (error) {
+              console.log("Data could not be saved: " + error);
+            } else {
+              switch(action){
+               case "close_tab":
+                app.ask("Scrolling up! Let me know if you want me to do anything else.");
+                 break;
+               case "go_back":
+                 app.ask("Going back! Let me know if you want me to do anything else.");
+                 break;
+               case "go_forward":
+                 app.ask("Going forward! Let me know if you want me to do anything else.");
+                 break;
+               case "new_tab":
+                 app.ask("Opening new tab! Let me know if you want me to do anything else.");
+                 break;
+               case "scroll_up":
+                 app.ask("Scrolling up! Let me know if you want me to do anything else.");
+                 break;
+               case "scroll_down":
+                 app.ask("Scrolling down! Let me know if you want me to do anything else.");
+                 break;
+               default:
+                 app.ask("Uh oh, something went wrong in following your instructions!");
+              }
+            }
+          });
       }
     }, function(errorObject) {
       console.log("Firebase user (read) read failed: " + errorObject.code);
@@ -209,7 +240,6 @@ exports.chromeControl = (request, response) => {
   }
 
   const actionMap = new Map();
-  actionMap.set('test_func', funcController);
   actionMap.set('close_tab', funcController);
   actionMap.set('go_back', funcController);
   actionMap.set('go_forward', funcController);
