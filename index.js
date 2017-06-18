@@ -33,7 +33,6 @@ exports.chromeControl = (request, response) => {
   });
 
   var gUser;
-//  var admin.database();
 
   if (admin.apps.length == 0) {
     console.log("should initialize firebase now...");
@@ -52,11 +51,10 @@ exports.chromeControl = (request, response) => {
       }),
       databaseURL: "https://chromecontrol-77635.firebaseio.com"
     });
+       getGUser(checkUserInFB);
 //    admin.database() = admin.database();
 //    admin.database().enableLogging(true);
   }
-
-  getGUser(checkUserInFB);
 
   function getGUser(opFunc) {
     plus.people.get({
@@ -123,15 +121,26 @@ exports.chromeControl = (request, response) => {
     var gRef = admin.database().ref("users/" + gUser.id);
     gRef.update({
       "command": "close_tab"
+    },function(error) {
+      if (error) {
+        console.log("Data could not be saved: " + error);
+      } else {
+        app.ask("Closing tab! Let me know if you want me to do anything else.");
+      }
     });
   }
 
   function goBack(app) {
-    app.ask("Going back! Let me know if you want me to do anything else.");
     getGUser(checkChromeStatus);
     var gRef = admin.database().ref("users/" + gUser.id);
     gRef.update({
       "command": "go_back"
+    },function(error) {
+      if (error) {
+        console.log("Data could not be saved: " + error);
+      } else {
+        app.ask("Going back! Let me know if you want me to do anything else.");
+      }
     });
   }
 
