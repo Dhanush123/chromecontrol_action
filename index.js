@@ -125,7 +125,7 @@ exports.chromeControl = (request, response) => {
             } else {
               switch(action){
                case "close_tab":
-                app.ask("Scrolling up! Let me know if you want me to do anything else.");
+                app.ask("Closing tab! Let me know if you want me to do anything else.");
                  break;
                case "go_back":
                  app.ask("Going back! Let me know if you want me to do anything else.");
