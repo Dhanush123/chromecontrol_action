@@ -27,15 +27,13 @@ exports.chromeControl = (request, response) => {
   console.log('Request headers: ' + JSON.stringify(request.headers));
   console.log('Request body: ' + JSON.stringify(request.body));
 
-  // admin.database().enableLogging(true);
-
   var user = app.getUser();
   oauth2Client.setCredentials({
     access_token: user.accessToken
   });
 
   var gUser;
-  var fbDB;
+//  var admin.database();
 
   if (admin.apps.length == 0) {
     console.log("should initialize firebase now...");
@@ -54,7 +52,8 @@ exports.chromeControl = (request, response) => {
       }),
       databaseURL: "https://chromecontrol-77635.firebaseio.com"
     });
-    fbDB = admin.database();
+//    admin.database() = admin.database();
+    admin.database().enableLogging(true);
   }
 
   getGUser(checkUserInFB);
@@ -77,7 +76,7 @@ exports.chromeControl = (request, response) => {
   }
 
   function checkUserInFB() {
-    var ref = fbDB.ref("users");
+    var ref = admin.database().ref("users");
     ref.on("value", function(snapshot) {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
       if (!snapshot.val()[gUser.id]) {
@@ -91,7 +90,7 @@ exports.chromeControl = (request, response) => {
   }
 
   function fbCreateUser() {
-    var gRef = fbDB.ref("users/" + gUser.id);
+    var gRef = admin.database().ref("users/" + gUser.id);
     gRef.set({
       username: gUser.displayName,
       email: gUser.emails[0].value,
@@ -102,7 +101,7 @@ exports.chromeControl = (request, response) => {
   }
 
   function checkChromeStatus() {
-    var ref = fbDB.ref("users");
+    var ref = admin.database().ref("users");
     ref.on("value", function(snapshot) {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
       console.log("snapshot.val()[" + gUser.id + "].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
@@ -121,7 +120,7 @@ exports.chromeControl = (request, response) => {
   function closeTab(app) {
     app.ask("Closing tab! Let me know if you want me to do anything else.");
     getGUser(checkChromeStatus);
-    var gRef = fbDB.ref("users/" + gUser.id);
+    var gRef = admin.database().ref("users/" + gUser.id);
     gRef.update({
       "command": "close_tab"
     });
@@ -130,7 +129,7 @@ exports.chromeControl = (request, response) => {
   function goBack(app) {
     app.ask("Going back! Let me know if you want me to do anything else.");
     getGUser(checkChromeStatus);
-    var gRef = fbDB.ref("users/" + gUser.id);
+    var gRef = admin.database().ref("users/" + gUser.id);
     gRef.update({
       "command": "go_back"
     });
@@ -139,7 +138,7 @@ exports.chromeControl = (request, response) => {
   function goForward(app) {
     app.ask("Going forward! Let me know if you want me to do anything else.");
     getGUser(checkChromeStatus);
-    var gRef = fbDB.ref("users/" + gUser.id);
+    var gRef = admin.database().ref("users/" + gUser.id);
     gRef.update({
       "command": "go_forward"
     });
@@ -148,7 +147,7 @@ exports.chromeControl = (request, response) => {
   function newTab(app) {
     app.ask("Opening new tab! Let me know if you want me to do anything else.");
     getGUser(checkChromeStatus);
-    var gRef = fbDB.ref("users/" + gUser.id);
+    var gRef = admin.database().ref("users/" + gUser.id);
     gRef.update({
       "command": "new_tab"
     });
@@ -157,7 +156,7 @@ exports.chromeControl = (request, response) => {
   function scrollDown(app) {
     app.ask("Scrolling down! Let me know if you want me to do anything else.");
     getGUser(checkChromeStatus);
-    var gRef = fbDB.ref("users/" + gUser.id);
+    var gRef = admin.database().ref("users/" + gUser.id);
     gRef.update({
       "command": "scroll_down"
     });
@@ -166,7 +165,7 @@ exports.chromeControl = (request, response) => {
   function scrollUp(app) {
     app.ask("Scrolling up! Let me know if you want me to do anything else.");
     getGUser(checkChromeStatus);
-    var gRef = fbDB.ref("users/" + gUser.id);
+    var gRef = admin.database().ref("users/" + gUser.id);
     gRef.update({
       "command": "scroll_up"
     });
