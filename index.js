@@ -53,7 +53,7 @@ exports.chromeControl = (request, response) => {
       databaseURL: "https://chromecontrol-77635.firebaseio.com"
     });
 //    admin.database() = admin.database();
-    admin.database().enableLogging(true);
+//    admin.database().enableLogging(true);
   }
 
   getGUser(checkUserInFB);
