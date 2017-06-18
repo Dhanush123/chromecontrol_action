@@ -28,7 +28,7 @@ exports.chromeControl = (request, response) => {
   });
   console.log('Request headers: ' + JSON.stringify(request.headers));
   console.log('Request body: ' + JSON.stringify(request.body));
-  console.log("api.ai action was: " + request.result.action);
+  console.log("api.ai action was: " + request.body.result.action);
   action = request.result.action;
   var user = app.getUser();
   oauth2Client.setCredentials({
