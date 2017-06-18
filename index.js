@@ -51,9 +51,6 @@ exports.chromeControl = (request, response) => {
       }),
       databaseURL: "https://chromecontrol-77635.firebaseio.com"
     });
-       getGUser(checkUserInFB);
-//    admin.database() = admin.database();
-//    admin.database().enableLogging(true);
   }
 
   function getGUser(opFunc) {
@@ -76,11 +73,13 @@ exports.chromeControl = (request, response) => {
   function checkUserInFB() {
     var ref = admin.database().ref("users");
     ref.on("value", function(snapshot) {
-      console.log("snapshot: " + JSON.stringify(snapshot.val()));
+      console.log("snapshot (checkuser): " + JSON.stringify(snapshot.val()));
       if (!snapshot.val()[gUser.id]) {
+        console.log("will have to create new user...")
         fbCreateUser();
       } else {
-        console.log("user already exists in Firebase");
+        console.log("user already exists in Firebase!");
+        return checkChromeStatus();
       }
     }, function(errorObject) {
       console.log("Firebase user (creation) read failed: " + errorObject.code);
@@ -94,119 +93,127 @@ exports.chromeControl = (request, response) => {
       email: gUser.emails[0].value,
       chromeLoggedIn: false,
       command: "none"
-    });
+    },function(error) {
+        if (error) {
+          console.log("Data could not be saved (user create): " + error);
+        } else {
+          return checkChromeStatus();
+        }
+      });
     console.log("created new user in Firebase");
   }
 
-  function checkChromeStatus(opFunc) {
+  function checkChromeStatus() {
     var ref = admin.database().ref("users");
     ref.on("value", function(snapshot) {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
       console.log("snapshot.val()[" + gUser.id + "].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
-      if (!snapshot.val()[gUser.id].chromeLoggedIn) {
+      console.log("api.ai action was: " + request.result.action);
+      if(!snapshot.val()[gUser.id].chromeLoggedIn){
         app.tell("Hey! It seems like you haven't installed the \"Chrome Control\" Chrome Extension in your Google Chrome Browser yet. Can you come back after you've done that? U+1F642");
       }
       else {
-        if (typeof opFunc === "function") {
-          console.log("executing order 66 :D")
-          opFunc();
-        }
+        app.tell("Hey, you're logged in to Chrome!");
       }
     }, function(errorObject) {
       console.log("Firebase user (read) read failed: " + errorObject.code);
     });
   }
 
-  function testFunc(app) {
-    app.ask("Wow, you found the developer test function. Lucky you!");
-  }
-
-  function closeTab(app) {
-    getGUser(checkChromeStatus(function() {
-      var gRef = admin.database().ref("users/" + gUser.id);
-      gRef.update({
-        "command": "close_tab"
-      },function(error) {
-        if (error) {
-          console.log("Data could not be saved: " + error);
-        } else {
-          app.ask("Closing tab! Let me know if you want me to do anything else.");
-        }
-      });
-    }));
-  }
-
-  function goBack(app) {
-    getGUser(checkChromeStatus, function(){
-      var gRef = admin.database().ref("users/" + gUser.id);
-      gRef.update({
-        "command": "go_back"
-      },function(error) {
-        if (error) {
-          console.log("Data could not be saved: " + error);
-        } else {
-          app.ask("Going back! Let me know if you want me to do anything else.");
-        }
-      });
-    });
-  }
-
-  function goForward(app) {
-    getGUser(checkChromeStatus, function() {
-      var gRef = admin.database().ref("users/" + gUser.id);
-      gRef.update({
-        "command": "go_forward"
-      },function(error) {
-        if (error) {
-          console.log("Data could not be saved: " + error);
-        } else {
-          app.ask("Going forward! Let me know if you want me to do anything else.");
-        }
-      });
-    });
-  }
-
-  function newTab(app) {
-    getGUser(checkChromeStatus, function() {
-      var gRef = admin.database().ref("users/" + gUser.id);
-      gRef.update({
-        "command": "new_tab"
-      },function(error) {
-        if (error) {
-          console.log("Data could not be saved: " + error);
-        } else {
-          app.ask("Opening new tab! Let me know if you want me to do anything else.");
-        }
-      });
-    });
-  }
-
-  function scrollDown(app) {
-    app.ask("Scrolling down! Let me know if you want me to do anything else.");
-    getGUser(checkChromeStatus);
-    var gRef = admin.database().ref("users/" + gUser.id);
-    gRef.update({
-      "command": "scroll_down"
-    });
-  }
-
-  function scrollUp(app) {
-    app.ask("Scrolling up! Let me know if you want me to do anything else.");
-    getGUser(checkChromeStatus);
-    var gRef = admin.database().ref("users/" + gUser.id);
-    gRef.update({
-      "command": "scroll_up"
-    });
+//  function testFunc(app) {
+//    app.ask("Wow, you found the developer test function. Lucky you!");
+//  }
+//
+//  function closeTab(app) {
+//    getGUser(checkChromeStatus(function() {
+//      var gRef = admin.database().ref("users/" + gUser.id);
+//      gRef.update({
+//        "command": "close_tab"
+//      },function(error) {
+//        if (error) {
+//          console.log("Data could not be saved: " + error);
+//        } else {
+//          app.ask("Closing tab! Let me know if you want me to do anything else.");
+//        }
+//      });
+//    }));
+//  }
+//
+//  function goBack(app) {
+//    getGUser(checkChromeStatus, function(){
+//      var gRef = admin.database().ref("users/" + gUser.id);
+//      gRef.update({
+//        "command": "go_back"
+//      },function(error) {
+//        if (error) {
+//          console.log("Data could not be saved: " + error);
+//        } else {
+//          app.ask("Going back! Let me know if you want me to do anything else.");
+//        }
+//      });
+//    });
+//  }
+//
+//  function goForward(app) {
+//    getGUser(checkChromeStatus, function() {
+//      var gRef = admin.database().ref("users/" + gUser.id);
+//      gRef.update({
+//        "command": "go_forward"
+//      },function(error) {
+//        if (error) {
+//          console.log("Data could not be saved: " + error);
+//        } else {
+//          app.ask("Going forward! Let me know if you want me to do anything else.");
+//        }
+//      });
+//    });
+//  }
+//
+//  function newTab(app) {
+//    getGUser(checkChromeStatus, function() {
+//      var gRef = admin.database().ref("users/" + gUser.id);
+//      gRef.update({
+//        "command": "new_tab"
+//      },function(error) {
+//        if (error) {
+//          console.log("Data could not be saved: " + error);
+//        } else {
+//          app.ask("Opening new tab! Let me know if you want me to do anything else.");
+//        }
+//      });
+//    });
+//  }
+//
+//  function scrollDown(app) {
+//    app.ask("Scrolling down! Let me know if you want me to do anything else.");
+//    getGUser(checkChromeStatus);
+//    var gRef = admin.database().ref("users/" + gUser.id);
+//    gRef.update({
+//      "command": "scroll_down"
+//    });
+//  }
+//
+//  function scrollUp(app) {
+//    app.ask("Scrolling up! Let me know if you want me to do anything else.");
+//    getGUser(checkChromeStatus);
+//    var gRef = admin.database().ref("users/" + gUser.id);
+//    gRef.update({
+//      "command": "scroll_up"
+//    });
+//  }
+  
+  function funcController(app) {
+    getGUser(checkUserInFB);
   }
 
   const actionMap = new Map();
-  actionMap.set('test_func', testFunc);
-  actionMap.set('close_tab', closeTab);
-  actionMap.set('go_back', goBack);
-  actionMap.set('go_forward', goForward);
-  actionMap.set('new_tab', newTab);
-  actionMap.set('scroll_down', scrollDown);
-  actionMap.set('scroll_up', scrollUp);
+  actionMap.set('test_func', funcController);
+  actionMap.set('close_tab', funcController);
+  actionMap.set('go_back', funcController);
+  actionMap.set('go_forward', funcController);
+  actionMap.set('new_tab', funcController);
+  actionMap.set('scroll_down', funcController);
+  actionMap.set('scroll_up', funcController);
 
   app.handleRequest(actionMap);
 }
