@@ -57,20 +57,27 @@ exports.chromeControl = (request, response) => {
   }
 
   function getGUser(opFunc) {
-    plus.people.get({
-      userId: 'me',
-      auth: oauth2Client
-    }, function(err, res) {
-      console.log("g+ err: " + JSON.stringify(err));
-      console.log("g+ res: " + JSON.stringify(res));
-      gUser = res;
-      console.log("gUser.displayName: " + gUser.displayName);
-      console.log("gUser.emails[0].value: " + gUser.emails[0].value);
-      console.log("gUser.id: " + gUser.id);
+    if(typeof gUser == undefined){
+      plus.people.get({
+        userId: 'me',
+        auth: oauth2Client
+      }, function(err, res) {
+        console.log("g+ err: " + JSON.stringify(err));
+        console.log("g+ res: " + JSON.stringify(res));
+        gUser = res;
+        console.log("gUser.displayName: " + gUser.displayName);
+        console.log("gUser.emails[0].value: " + gUser.emails[0].value);
+        console.log("gUser.id: " + gUser.id);
+        if (typeof opFunc === "function") {
+          opFunc();
+        }
+      });
+    }
+    else {
       if (typeof opFunc === "function") {
         opFunc();
       }
-    });
+    }
   }
 
   function checkUserInFB() {
