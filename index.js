@@ -57,7 +57,7 @@ exports.chromeControl = (request, response) => {
   }
 
   function getGUser(opFunc) {
-    if(typeof gUser == undefined){
+    if(typeof gUser == "undefined"){
       plus.people.get({
         userId: 'me',
         auth: oauth2Client
