@@ -26,10 +26,12 @@ exports.chromeControl = (request, response) => {
     request,
     response
   });
+  
   console.log('Request headers: ' + JSON.stringify(request.headers));
   console.log('Request body: ' + JSON.stringify(request.body));
   console.log("api.ai action was: " + request.body.result.action);
   action = request.body.result.action;
+  
   var user = app.getUser();
   oauth2Client.setCredentials({
     access_token: user.accessToken
@@ -82,7 +84,7 @@ exports.chromeControl = (request, response) => {
         fbCreateUser();
       } else {
         console.log("user already exists in Firebase!");
-        return checkChromeStatus();
+        checkChromeStatus();
       }
     }, function(errorObject) {
       console.log("Firebase user (creation) read failed: " + errorObject.code);
@@ -106,7 +108,7 @@ exports.chromeControl = (request, response) => {
     console.log("created new user in Firebase");
   }
 
-  function checkChromeStatus() {
+  function checkChromeStatus(app) {
     var ref = admin.database().ref("users");
     ref.on("value", function(snapshot) {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
