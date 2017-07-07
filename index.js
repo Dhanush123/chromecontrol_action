@@ -77,7 +77,7 @@ exports.chromeControl = (request, response) => {
 
   function checkUserInFB(app) {
     var ref = admin.database().ref("users");
-    ref.on("value", function(snapshot) {
+    ref.once("value", function(snapshot) {
       console.log("snapshot (checkuser): " + JSON.stringify(snapshot.val()));
       if (!snapshot.val()[gUser.id]) {
         console.log("will have to create new user...")
@@ -110,7 +110,7 @@ exports.chromeControl = (request, response) => {
 
   function checkChromeStatus(app) {
     var ref = admin.database().ref("users");
-    ref.on("value", function(snapshot) {
+    ref.once("value", function(snapshot) {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
       console.log("snapshot.val()[" + gUser.id + "].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
       if(!snapshot.val()[gUser.id].chromeLoggedIn){
