@@ -58,7 +58,7 @@ exports.chromeControl = (request, response) => {
     });
   }
 
-  function getGUser(opFunc) {
+  function getGUser(opFunc, app) {
     plus.people.get({
       userId: 'me',
       auth: oauth2Client
@@ -70,28 +70,28 @@ exports.chromeControl = (request, response) => {
       console.log("gUser.emails[0].value: " + gUser.emails[0].value);
       console.log("gUser.id: " + gUser.id);
       if (typeof opFunc === "function") {
-        opFunc();
+        opFunc(app);
       }
     });
   }
 
-  function checkUserInFB() {
+  function checkUserInFB(app) {
     var ref = admin.database().ref("users");
     ref.on("value", function(snapshot) {
       console.log("snapshot (checkuser): " + JSON.stringify(snapshot.val()));
       if (!snapshot.val()[gUser.id]) {
         console.log("will have to create new user...")
-        fbCreateUser();
+        fbCreateUser(app);
       } else {
         console.log("user already exists in Firebase!");
-        checkChromeStatus();
+        checkChromeStatus(app);
       }
     }, function(errorObject) {
       console.log("Firebase user (creation) read failed: " + errorObject.code);
     });
   }
 
-  function fbCreateUser() {
+  function fbCreateUser(app) {
     var gRef = admin.database().ref("users/" + gUser.id);
     gRef.set({
       username: gUser.displayName,
@@ -102,7 +102,7 @@ exports.chromeControl = (request, response) => {
         if (error) {
           console.log("Data could not be saved (user create): " + error);
         } else {
-          return checkChromeStatus();
+          checkChromeStatus(app);
         }
       });
     console.log("created new user in Firebase");
@@ -114,11 +114,10 @@ exports.chromeControl = (request, response) => {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
       console.log("snapshot.val()[" + gUser.id + "].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
       if(!snapshot.val()[gUser.id].chromeLoggedIn){
-        app.tell("Hey! It seems like you haven't installed the \"Chrome Control\" Chrome Extension in your Google Chrome Browser yet. Can you come back after you've done that? U+1F642");
+        app.tell("Hey! It seems like you haven't installed the \"Chrome Control\" Chrome Extension in your Google Chrome Browser yet. Can you come back after you've done that?");
       }
       else {
          var gRef = admin.database().ref("users/" + gUser.id);
-//        app.tell("Hey, you're logged in to Chrome!");
           gRef.update({
             "command": action
           },function(error) {
@@ -145,7 +144,7 @@ exports.chromeControl = (request, response) => {
                  app.ask("Scrolling down! Let me know if you want me to do anything else.");
                  break;
                default:
-                 app.ask("Uh oh, something went wrong in following your instructions!");
+                 app.tell("Uh oh, something went wrong in following your instructions!");
               }
             }
           });
@@ -238,7 +237,7 @@ exports.chromeControl = (request, response) => {
 //  }
   
   function funcController(app) {
-    getGUser(checkUserInFB);
+    var msg = getGUser(checkUserInFB, app);
   }
 
   const actionMap = new Map();
