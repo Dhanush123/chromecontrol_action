@@ -153,88 +153,6 @@ exports.chromeControl = (request, response) => {
       console.log("Firebase user (read) read failed: " + errorObject.code);
     });
   }
-
-//  function testFunc(app) {
-//    app.ask("Wow, you found the developer test function. Lucky you!");
-//  }
-//
-//  function closeTab(app) {
-//    getGUser(checkChromeStatus(function() {
-//      var gRef = admin.database().ref("users/" + gUser.id);
-//      gRef.update({
-//        "command": "close_tab"
-//      },function(error) {
-//        if (error) {
-//          console.log("Data could not be saved: " + error);
-//        } else {
-//          app.ask("Closing tab! Let me know if you want me to do anything else.");
-//        }
-//      });
-//    }));
-//  }
-//
-//  function goBack(app) {
-//    getGUser(checkChromeStatus, function(){
-//      var gRef = admin.database().ref("users/" + gUser.id);
-//      gRef.update({
-//        "command": "go_back"
-//      },function(error) {
-//        if (error) {
-//          console.log("Data could not be saved: " + error);
-//        } else {
-//          app.ask("Going back! Let me know if you want me to do anything else.");
-//        }
-//      });
-//    });
-//  }
-//
-//  function goForward(app) {
-//    getGUser(checkChromeStatus, function() {
-//      var gRef = admin.database().ref("users/" + gUser.id);
-//      gRef.update({
-//        "command": "go_forward"
-//      },function(error) {
-//        if (error) {
-//          console.log("Data could not be saved: " + error);
-//        } else {
-//          app.ask("Going forward! Let me know if you want me to do anything else.");
-//        }
-//      });
-//    });
-//  }
-//
-//  function newTab(app) {
-//    getGUser(checkChromeStatus, function() {
-//      var gRef = admin.database().ref("users/" + gUser.id);
-//      gRef.update({
-//        "command": "new_tab"
-//      },function(error) {
-//        if (error) {
-//          console.log("Data could not be saved: " + error);
-//        } else {
-//          app.ask("Opening new tab! Let me know if you want me to do anything else.");
-//        }
-//      });
-//    });
-//  }
-//
-//  function scrollDown(app) {
-//    app.ask("Scrolling down! Let me know if you want me to do anything else.");
-//    getGUser(checkChromeStatus);
-//    var gRef = admin.database().ref("users/" + gUser.id);
-//    gRef.update({
-//      "command": "scroll_down"
-//    });
-//  }
-//
-//  function scrollUp(app) {
-//    app.ask("Scrolling up! Let me know if you want me to do anything else.");
-//    getGUser(checkChromeStatus);
-//    var gRef = admin.database().ref("users/" + gUser.id);
-//    gRef.update({
-//      "command": "scroll_up"
-//    });
-//  }
   
   function funcController(app) {
     var msg = getGUser(checkUserInFB, app);
@@ -246,7 +164,9 @@ exports.chromeControl = (request, response) => {
   actionMap.set('go_forward', funcController);
   actionMap.set('new_tab', funcController);
   actionMap.set('scroll_down', funcController);
+  actionMap.set('scroll_down_full', funcController);
   actionMap.set('scroll_up', funcController);
+  actionMap.set('scroll_up_full', funcController);
 
   app.handleRequest(actionMap);
 }
