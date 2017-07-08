@@ -32,6 +32,12 @@ exports.chromeControl = (request, response) => {
   console.log("api.ai action was: " + request.body.result.action);
   action = request.body.result.action;
   
+  var query;
+  if(typeof request.body.result.parameters.any !== "undefined"){
+    query = request.body.result.parameters.any;
+    console.log("api.ai google search query was: " + query);
+  }
+  
   var user = app.getUser();
   oauth2Client.setCredentials({
     access_token: user.accessToken
@@ -114,7 +120,7 @@ exports.chromeControl = (request, response) => {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
       console.log("snapshot.val()[" + gUser.id + "].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
       if(!snapshot.val()[gUser.id].chromeLoggedIn){
-        app.tell("Hey! It seems like you haven't installed the \"Chrome Control\" Chrome Extension in your Google Chrome Browser yet. Can you come back after you've done that?");
+        app.tell("Hey! It seems like you haven't installed the \"Chrome Control\" Chrome Extension in your Google Chrome browser yet. Can you come back after you've done that?");
       }
       else {
          var gRef = admin.database().ref("users/" + gUser.id);
@@ -149,6 +155,17 @@ exports.chromeControl = (request, response) => {
               case "scroll_down_full":
                  app.ask("Scrolling all the way down! Let me know if you want me to do anything else.");
                  break;
+              case "google_search":
+                gRef.update({
+                  googlequery: query
+                },function(error) {
+                    if (error) {
+                      console.log("Data could not be saved (query save): " + error);
+                    } else {
+                      app.ask("Looking up on Google now! Let me know if you want me to do anything else.");
+                    }
+                  });
+                 break;
                default:
                  app.tell("Uh oh, something went wrong in following your instructions!");
               }
@@ -173,6 +190,7 @@ exports.chromeControl = (request, response) => {
   actionMap.set('scroll_down_full', funcController);
   actionMap.set('scroll_up', funcController);
   actionMap.set('scroll_up_full', funcController);
+  actionMap.set('google_search',funcController);
 
   app.handleRequest(actionMap);
 }
