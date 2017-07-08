@@ -157,7 +157,7 @@ exports.chromeControl = (request, response) => {
                  break;
               case "google_search":
                 gRef.update({
-                  googlequery: query
+                  googleQuery: query
                 },function(error) {
                     if (error) {
                       console.log("Data could not be saved (query save): " + error);
