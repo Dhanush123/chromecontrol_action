@@ -35,7 +35,7 @@ exports.chromeControl = (request, response) => {
   var query;
   if(typeof request.body.result.parameters.any !== "undefined"){
     query = request.body.result.parameters.any;
-    console.log("api.ai google search query was: " + query);
+    console.log("api.ai [google | stackoverflow] search query was: " + query);
   }
   
   var user = app.getUser();
@@ -201,8 +201,9 @@ exports.chromeControl = (request, response) => {
   actionMap.set('scroll_down_full', funcController);
   actionMap.set('scroll_up', funcController);
   actionMap.set('scroll_up_full', funcController);
-  actionMap.set('google_search',funcController);
-  actionMap.set('stackoverflow_search',funcController);
+  actionMap.set('google_search', funcController);
+  actionMap.set('stackoverflow_search', funcController);
+  actionMap.set('youtube_search', funcController);
   
   app.handleRequest(actionMap);
 }
