@@ -166,6 +166,17 @@ exports.chromeControl = (request, response) => {
                     }
                   });
                  break;
+              case "stackoverflow_search":
+                gRef.update({
+                  stackoverflowQuery: query
+                },function(error) {
+                    if (error) {
+                      console.log("Data could not be saved (query save): " + error);
+                    } else {
+                      app.ask("Looking up on StackOverflow now! Let me know if you want me to do anything else.");
+                    }
+                  });
+                 break;
                default:
                  app.tell("Uh oh, something went wrong in following your instructions!");
               }
@@ -191,7 +202,8 @@ exports.chromeControl = (request, response) => {
   actionMap.set('scroll_up', funcController);
   actionMap.set('scroll_up_full', funcController);
   actionMap.set('google_search',funcController);
-
+  actionMap.set('stackoverflow_search',funcController);
+  
   app.handleRequest(actionMap);
 }
 // [END YourAction]
