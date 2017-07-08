@@ -140,8 +140,14 @@ exports.chromeControl = (request, response) => {
                case "scroll_up":
                  app.ask("Scrolling up! Let me know if you want me to do anything else.");
                  break;
+              case "scroll_up_full":
+                 app.ask("Scrolling all the way up! Let me know if you want me to do anything else.");
+                 break;
                case "scroll_down":
                  app.ask("Scrolling down! Let me know if you want me to do anything else.");
+                 break;
+              case "scroll_down_full":
+                 app.ask("Scrolling all the way down! Let me know if you want me to do anything else.");
                  break;
                default:
                  app.tell("Uh oh, something went wrong in following your instructions!");
