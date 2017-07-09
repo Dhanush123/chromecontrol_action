@@ -1,13 +1,13 @@
-'use strict';
+use strict";
 
-process.env.DEBUG = 'actions-on-google:*';
-const App = require('actions-on-google').ApiAiApp;
-const env = require('node-env-file');
+process.env.DEBUG = "actions-on-google:*";
+const App = require("actions-on-google").ApiAiApp;
+const env = require("node-env-file");
 
 const admin = require("firebase-admin");
 
-const google = require('googleapis');
-var plus = google.plus('v1');
+const google = require("googleapis");
+var plus = google.plus("v1");
 var OAuth2 = google.auth.OAuth2;
 
 var oauth2Client = new OAuth2(
@@ -16,7 +16,7 @@ var oauth2Client = new OAuth2(
   process.env.GOOGLE_REDIRECT_URL
 );
 
-env('./.env');
+env("./.env");
 
 // [START YourAction]
 exports.chromeControl = (request, response) => {
@@ -27,8 +27,8 @@ exports.chromeControl = (request, response) => {
     response
   });
   
-  console.log('Request headers: ' + JSON.stringify(request.headers));
-  console.log('Request body: ' + JSON.stringify(request.body));
+  console.log("Request headers: " + JSON.stringify(request.headers));
+  console.log("Request body: " + JSON.stringify(request.body));
   console.log("api.ai action was: " + request.body.result.action);
   action = request.body.result.action;
   
@@ -66,7 +66,7 @@ exports.chromeControl = (request, response) => {
 
   function getGUser(opFunc, app) {
     plus.people.get({
-      userId: 'me',
+      userId: "me",
       auth: oauth2Client
     }, function(err, res) {
       console.log("g+ err: " + JSON.stringify(err));
@@ -204,18 +204,18 @@ exports.chromeControl = (request, response) => {
   }
 
   const actionMap = new Map();
-  actionMap.set('close_tab', funcController);
-  actionMap.set('go_back', funcController);
-  actionMap.set('go_forward', funcController);
-  actionMap.set('new_tab', funcController);
-  actionMap.set('scroll_down', funcController);
-  actionMap.set('scroll_down_full', funcController);
-  actionMap.set('scroll_up', funcController);
-  actionMap.set('scroll_up_full', funcController);
-  actionMap.set('google_search', funcController);
-  actionMap.set('stackoverflow_search', funcController);
-  actionMap.set('youtube_search', funcController);
-  
+  actionMap.set(close_tab, funcController);
+  actionMap.set(go_back, funcController);
+  actionMap.set(go_forward, funcController);
+  actionMap.set(new_tab, funcController);
+  actionMap.set(scroll_down, funcController);
+  actionMap.set(scroll_down_full, funcController);
+  actionMap.set(scroll_up, funcController);
+  actionMap.set(scroll_up_full, funcController);
+  actionMap.set(google_search, funcController);
+  actionMap.set(stackoverflow_search, funcController);
+  actionMap.set(youtube_search, funcController);
+  actionMap.set(zoom, funcController);
   app.handleRequest(actionMap);
 }
 // [END YourAction]
