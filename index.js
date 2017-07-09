@@ -35,7 +35,7 @@ exports.chromeControl = (request, response) => {
   var query;
   if(typeof request.body.result.parameters.any !== "undefined"){
     query = request.body.result.parameters.any;
-    console.log("api.ai [google | stackoverflow] search query was: " + query);
+    console.log("api.ai [google | stackoverflow | youtube] search query was: " + query);
   }
   
   var user = app.getUser();
@@ -162,7 +162,7 @@ exports.chromeControl = (request, response) => {
                     if (error) {
                       console.log("Data could not be saved (query save): " + error);
                     } else {
-                      app.ask("Looking up on Google now! Let me know if you want me to do anything else.");
+                      app.ask("Searching Google now! Let me know if you want me to do anything else.");
                     }
                   });
                  break;
@@ -173,7 +173,18 @@ exports.chromeControl = (request, response) => {
                     if (error) {
                       console.log("Data could not be saved (query save): " + error);
                     } else {
-                      app.ask("Looking up on StackOverflow now! Let me know if you want me to do anything else.");
+                      app.ask("Searching StackOverflow now! Let me know if you want me to do anything else.");
+                    }
+                  });
+                 break;
+              case "youtube_search":
+                gRef.update({
+                  youtubeQuery: query
+                },function(error) {
+                    if (error) {
+                      console.log("Data could not be saved (query save): " + error);
+                    } else {
+                      app.ask("Searching YouTube now! Let me know if you want me to do anything else.");
                     }
                   });
                  break;
