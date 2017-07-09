@@ -20,29 +20,35 @@ env("./.env");
 
 // [START YourAction]
 exports.chromeControl = (request, response) => {
-  
+
   var action = "";
   const app = new App({
     request,
     response
   });
-  
+
   console.log("Request headers: " + JSON.stringify(request.headers));
   console.log("Request body: " + JSON.stringify(request.body));
   console.log("api.ai action was: " + request.body.result.action);
   action = request.body.result.action;
-  
+
   var query;
-  if(typeof request.body.result.parameters.any !== "undefined"){
+  if (typeof request.body.result.parameters.any !== "undefined") {
     query = request.body.result.parameters.any;
     console.log("api.ai [google | stackoverflow | youtube] search query: " + query);
   }
   var zoom;
-  if(typeof request.body.result.parameters.zoom !== "undefined"){
+  if (typeof request.body.result.parameters.zoom !== "undefined") {
     zoom = request.body.result.parameters.zoom;
     console.log("api.ai zoom query: " + zoom);
   }
   
+  var url;
+  if (typeof request.body.result.parameters.url !== "undefined") {
+    url = request.body.result.parameters.url;
+    console.log("api.ai url query: " + url);
+  }
+
   var user = app.getUser();
   oauth2Client.setCredentials({
     access_token: user.accessToken
@@ -109,13 +115,13 @@ exports.chromeControl = (request, response) => {
       email: gUser.emails[0].value,
       chromeLoggedIn: false,
       command: "none"
-    },function(error) {
-        if (error) {
-          console.log("Data could not be saved (user create): " + error);
-        } else {
-          checkChromeStatus(app);
-        }
-      });
+    }, function(error) {
+      if (error) {
+        console.log("Data could not be saved (user create): " + error);
+      } else {
+        checkChromeStatus(app);
+      }
+    });
     console.log("created new user in Firebase");
   }
 
@@ -124,97 +130,107 @@ exports.chromeControl = (request, response) => {
     ref.once("value", function(snapshot) {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
       console.log("snapshot.val()[" + gUser.id + "].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
-      if(!snapshot.val()[gUser.id].chromeLoggedIn){
+      if (!snapshot.val()[gUser.id].chromeLoggedIn) {
         app.tell("Hey! It seems like you haven't installed the \"Chrome Control\" Chrome Extension in your Google Chrome browser yet. Can you come back after you've done that?");
-      }
-      else {
-         var gRef = admin.database().ref("users/" + gUser.id);
-          gRef.update({
-            "command": action
-          },function(error) {
-            if (error) {
-              console.log("Data could not be saved: " + error);
-            } else {
-              switch(action){
-               case "close_tab":
+      } else {
+        var gRef = admin.database().ref("users/" + gUser.id);
+        gRef.update({
+          "command": action
+        }, function(error) {
+          if (error) {
+            console.log("Data could not be saved: " + error);
+          } else {
+            switch (action) {
+              case "close_tab":
                 app.ask("Closing tab!");
-                 break;
-               case "go_back":
-                 app.ask("Going back!");
-                 break;
-               case "go_forward":
-                 app.ask("Going forward!");
-                 break;
-               case "new_tab":
-                 app.ask("Opening new tab!");
-                 break;
-               case "scroll_up":
-                 app.ask("Scrolling up!");
-                 break;
+                break;
+              case "go_back":
+                app.ask("Going back!");
+                break;
+              case "go_forward":
+                app.ask("Going forward!");
+                break;
+              case "new_tab":
+                app.ask("Opening new tab!");
+                break;
+              case "scroll_up":
+                app.ask("Scrolling up!");
+                break;
               case "scroll_up_full":
-                 app.ask("Scrolling all the way up!");
-                 break;
-               case "scroll_down":
-                 app.ask("Scrolling down!");
-                 break;
+                app.ask("Scrolling all the way up!");
+                break;
+              case "scroll_down":
+                app.ask("Scrolling down!");
+                break;
               case "scroll_down_full":
-                 app.ask("Scrolling all the way down!");
-                 break;
+                app.ask("Scrolling all the way down!");
+                break;
               case "google_search":
                 gRef.update({
                   googleQuery: query
-                },function(error) {
-                    if (error) {
-                      console.log("Data could not be saved (query save): " + error);
-                    } else {
-                      app.ask("Searching Google now!");
-                    }
-                  });
-                 break;
+                }, function(error) {
+                  if (error) {
+                    console.log("Data could not be saved (query save): " + error);
+                  } else {
+                    app.ask("Searching Google now!");
+                  }
+                });
+                break;
               case "stackoverflow_search":
                 gRef.update({
                   stackoverflowQuery: query
-                },function(error) {
-                    if (error) {
-                      console.log("Data could not be saved (query save): " + error);
-                    } else {
-                      app.ask("Searching StackOverflow now!");
-                    }
-                  });
-                 break;
+                }, function(error) {
+                  if (error) {
+                    console.log("Data could not be saved (query save): " + error);
+                  } else {
+                    app.ask("Searching StackOverflow now!");
+                  }
+                });
+                break;
               case "youtube_search":
                 gRef.update({
                   youtubeQuery: query
-                },function(error) {
-                    if (error) {
-                      console.log("Data could not be saved (query save): " + error);
-                    } else {
-                      app.ask("Searching YouTube now!");
-                    }
-                  });
-                 break;
-               case "zoom":
+                }, function(error) {
+                  if (error) {
+                    console.log("Data could not be saved (query save): " + error);
+                  } else {
+                    app.ask("Searching YouTube now!");
+                  }
+                });
+                break;
+              case "zoom":
                 gRef.update({
                   zoomType: zoom
-                },function(error) {
-                    if (error) {
-                      console.log("Data could not be saved (query save): " + error);
-                    } else {
-                      app.ask("Zooming " + zoom + " now!");
-                    }
-                  });
-                 break;                
-               default:
-                 app.tell("Uh oh, something went wrong in following your instructions!");
-              }
+                }, function(error) {
+                  if (error) {
+                    console.log("Data could not be saved (query save): " + error);
+                  } else {
+                    app.ask("Zooming " + zoom + " now!");
+                  }
+                });
+                break;
+              case "website_search":
+                gRef.update({
+                  websiteUrl: url
+                }, function(error) {
+                  if (error) {
+                    console.log("Data could not be saved (query save): " + error);
+                  } else {
+                    app.ask("Going to " + url + " now!");
+                  }
+                });
+                break;
+              default:
+                app.tell("Uh oh, something went wrong in following your instructions!");
             }
-          });
+          }
+        });
       }
     }, function(errorObject) {
       console.log("Firebase user (read) read failed: " + errorObject.code);
     });
   }
-  
+
   function funcController(app) {
     var msg = getGUser(checkUserInFB, app);
   }
@@ -232,6 +248,7 @@ exports.chromeControl = (request, response) => {
   actionMap.set("stackoverflow_search", funcController);
   actionMap.set("youtube_search", funcController);
   actionMap.set("zoom", funcController);
+  actionMap.set("website_search", funcController);
   app.handleRequest(actionMap);
 }
 // [END YourAction]
