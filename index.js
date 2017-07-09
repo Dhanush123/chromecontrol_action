@@ -132,28 +132,28 @@ exports.chromeControl = (request, response) => {
             } else {
               switch(action){
                case "close_tab":
-                app.ask("Closing tab! Let me know if you want me to do anything else.");
+                app.ask("Closing tab!");
                  break;
                case "go_back":
-                 app.ask("Going back! Let me know if you want me to do anything else.");
+                 app.ask("Going back!");
                  break;
                case "go_forward":
-                 app.ask("Going forward! Let me know if you want me to do anything else.");
+                 app.ask("Going forward!");
                  break;
                case "new_tab":
-                 app.ask("Opening new tab! Let me know if you want me to do anything else.");
+                 app.ask("Opening new tab!");
                  break;
                case "scroll_up":
-                 app.ask("Scrolling up! Let me know if you want me to do anything else.");
+                 app.ask("Scrolling up!");
                  break;
               case "scroll_up_full":
-                 app.ask("Scrolling all the way up! Let me know if you want me to do anything else.");
+                 app.ask("Scrolling all the way up!");
                  break;
                case "scroll_down":
-                 app.ask("Scrolling down! Let me know if you want me to do anything else.");
+                 app.ask("Scrolling down!");
                  break;
               case "scroll_down_full":
-                 app.ask("Scrolling all the way down! Let me know if you want me to do anything else.");
+                 app.ask("Scrolling all the way down!");
                  break;
               case "google_search":
                 gRef.update({
@@ -162,7 +162,7 @@ exports.chromeControl = (request, response) => {
                     if (error) {
                       console.log("Data could not be saved (query save): " + error);
                     } else {
-                      app.ask("Searching Google now! Let me know if you want me to do anything else.");
+                      app.ask("Searching Google now!");
                     }
                   });
                  break;
@@ -173,7 +173,7 @@ exports.chromeControl = (request, response) => {
                     if (error) {
                       console.log("Data could not be saved (query save): " + error);
                     } else {
-                      app.ask("Searching StackOverflow now! Let me know if you want me to do anything else.");
+                      app.ask("Searching StackOverflow now!");
                     }
                   });
                  break;
@@ -184,7 +184,7 @@ exports.chromeControl = (request, response) => {
                     if (error) {
                       console.log("Data could not be saved (query save): " + error);
                     } else {
-                      app.ask("Searching YouTube now! Let me know if you want me to do anything else.");
+                      app.ask("Searching YouTube now!");
                     }
                   });
                  break;
