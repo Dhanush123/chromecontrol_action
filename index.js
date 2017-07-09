@@ -35,7 +35,12 @@ exports.chromeControl = (request, response) => {
   var query;
   if(typeof request.body.result.parameters.any !== "undefined"){
     query = request.body.result.parameters.any;
-    console.log("api.ai [google | stackoverflow | youtube] search query was: " + query);
+    console.log("api.ai [google | stackoverflow | youtube] search query: " + query);
+  }
+  var zoom;
+  if(typeof request.body.result.parameters.zoom !== "undefined"){
+    zoom = request.body.result.parameters.zoom;
+    console.log("api.ai zoom query: " + zoom);
   }
   
   var user = app.getUser();
@@ -188,6 +193,17 @@ exports.chromeControl = (request, response) => {
                     }
                   });
                  break;
+               case "zoom":
+                gRef.update({
+                  zoomType: zoom
+                },function(error) {
+                    if (error) {
+                      console.log("Data could not be saved (query save): " + error);
+                    } else {
+                      app.ask("Zooming " + zoom + " now!");
+                    }
+                  });
+                 break;                
                default:
                  app.tell("Uh oh, something went wrong in following your instructions!");
               }
