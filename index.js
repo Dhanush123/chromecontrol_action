@@ -1,4 +1,4 @@
-use strict";
+"use strict";
 
 process.env.DEBUG = "actions-on-google:*";
 const App = require("actions-on-google").ApiAiApp;
@@ -204,18 +204,18 @@ exports.chromeControl = (request, response) => {
   }
 
   const actionMap = new Map();
-  actionMap.set(close_tab, funcController);
-  actionMap.set(go_back, funcController);
-  actionMap.set(go_forward, funcController);
-  actionMap.set(new_tab, funcController);
-  actionMap.set(scroll_down, funcController);
-  actionMap.set(scroll_down_full, funcController);
-  actionMap.set(scroll_up, funcController);
-  actionMap.set(scroll_up_full, funcController);
-  actionMap.set(google_search, funcController);
-  actionMap.set(stackoverflow_search, funcController);
-  actionMap.set(youtube_search, funcController);
-  actionMap.set(zoom, funcController);
+  actionMap.set("close_tab", funcController);
+  actionMap.set("go_back", funcController);
+  actionMap.set("go_forward", funcController);
+  actionMap.set("new_tab", funcController);
+  actionMap.set("scroll_down", funcController);
+  actionMap.set("scroll_down_full", funcController);
+  actionMap.set("scroll_up", funcController);
+  actionMap.set("scroll_up_full", funcController);
+  actionMap.set("google_search", funcController);
+  actionMap.set("stackoverflow_search", funcController);
+  actionMap.set("youtube_search", funcController);
+  actionMap.set("zoom", funcController);
   app.handleRequest(actionMap);
 }
 // [END YourAction]
