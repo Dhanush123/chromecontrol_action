@@ -46,7 +46,7 @@ exports.chromeControl = (request, response) => {
   var url;
   if (typeof request.body.result.parameters.url !== "undefined") {
     url = request.body.result.parameters.url;
-    console.log("api.ai url query: " + url);
+    console.log("api.ai website search url query: " + url);
   }
 
   var user = app.getUser();
@@ -165,6 +165,9 @@ exports.chromeControl = (request, response) => {
               case "scroll_down_full":
                 app.ask("Scrolling all the way down!");
                 break;
+              case "create_bookmark":
+                app.ask("Bookmarking your current tab!");
+                break;
               case "google_search":
                 gRef.update({
                   googleQuery: query
@@ -249,6 +252,7 @@ exports.chromeControl = (request, response) => {
   actionMap.set("youtube_search", funcController);
   actionMap.set("zoom", funcController);
   actionMap.set("website_search", funcController);
+  actionMap.set("create_bookmark", funcController);
   app.handleRequest(actionMap);
 }
 // [END YourAction]
