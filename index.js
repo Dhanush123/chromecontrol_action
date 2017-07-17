@@ -241,6 +241,24 @@ exports.chromeControl = (request, response) => {
     var msg = getGUser(checkUserInFB, app);
   }
 
+  function greetUser(app) {
+    var mainGreets = [
+      "Hi! What action do you want to take on Chrome?",
+      "Hello! How do you want to use Chrome?",
+      "Hey! How can I help you use Chrome?",
+      "Greetings! What would you like to do on Chrome today?"
+    ];
+
+    var noInputGreets = {
+     "You can say something like: open new tab, zoom in, or search YouTube for cat videos",
+     "You can say something like: refresh page, go back, or scroll down",
+     "You can say something like: go to facebook.com, bookmark this page, or scroll all the way up",
+    }
+    //Math.floor(Math.random() * (max - min + 1)) + min <-- from Mozilla
+    const inputPrompt = app.buildInputPrompt(false, mainGreets[Math.floor(Math.random() * 4)], noInputGreets);
+    app.ask(inputPrompt);
+  }
+
   const actionMap = new Map();
   actionMap.set("close_tab", funcController);
   actionMap.set("go_back", funcController);
@@ -257,6 +275,7 @@ exports.chromeControl = (request, response) => {
   actionMap.set("website_search", funcController);
   actionMap.set("create_bookmark", funcController);
   actionMap.set("reload_page", funcController);
+  actionMap.set("input.welcome", greetUser);
   app.handleRequest(actionMap);
 }
 // [END YourAction]
