@@ -142,34 +142,34 @@ exports.chromeControl = (request, response) => {
           } else {
             switch (action) {
               case "close_tab":
-                app.tell("Closing tab!");
+                app.ask("Closing tab!");
                 break;
               case "go_back":
-                app.tell("Going back!");
+                app.ask("Going back!");
                 break;
               case "go_forward":
-                app.tell("Going forward!");
+                app.ask("Going forward!");
                 break;
               case "new_tab":
-                app.tell("Opening new tab!");
+                app.ask("Opening new tab!");
                 break;
               case "scroll_up":
-                app.tell("Scrolling up!");
+                app.ask("Scrolling up!");
                 break;
               case "scroll_up_full":
-                app.tell("Scrolling all the way up!");
+                app.ask("Scrolling all the way up!");
                 break;
               case "scroll_down":
-                app.tell("Scrolling down!");
+                app.ask("Scrolling down!");
                 break;
               case "scroll_down_full":
-                app.tell("Scrolling all the way down!");
+                app.ask("Scrolling all the way down!");
                 break;
               case "create_bookmark":
-                app.tell("Bookmarking your current tab!");
+                app.ask("Bookmarking your current tab!");
                 break;
               case "reload_page":
-                app.tell("Reloading tab now!");
+                app.ask("Reloading tab now!");
                 break;
               case "google_search":
                 gRef.update({
@@ -178,7 +178,7 @@ exports.chromeControl = (request, response) => {
                   if (error) {
                     console.log("Data could not be saved (query save): " + error);
                   } else {
-                    app.tell("Searching Google now!");
+                    app.ask("Searching Google now!");
                   }
                 });
                 break;
@@ -189,7 +189,7 @@ exports.chromeControl = (request, response) => {
                   if (error) {
                     console.log("Data could not be saved (query save): " + error);
                   } else {
-                    app.tell("Searching StackOverflow now!");
+                    app.ask("Searching StackOverflow now!");
                   }
                 });
                 break;
@@ -200,7 +200,7 @@ exports.chromeControl = (request, response) => {
                   if (error) {
                     console.log("Data could not be saved (query save): " + error);
                   } else {
-                    app.tell("Searching YouTube now!");
+                    app.ask("Searching YouTube now!");
                   }
                 });
                 break;
@@ -211,7 +211,7 @@ exports.chromeControl = (request, response) => {
                   if (error) {
                     console.log("Data could not be saved (query save): " + error);
                   } else {
-                    app.tell("Zooming " + zoom + " now!");
+                    app.ask("Zooming " + zoom + " now!");
                   }
                 });
                 break;
@@ -222,7 +222,7 @@ exports.chromeControl = (request, response) => {
                   if (error) {
                     console.log("Data could not be saved (query save): " + error);
                   } else {
-                    app.tell("Going to " + url + " now!");
+                    app.ask("Going to " + url + " now!");
                   }
                 });
                 break;
