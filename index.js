@@ -42,7 +42,7 @@ exports.chromeControl = (request, response) => {
     zoom = request.body.result.parameters.zoom;
     console.log("api.ai zoom query: " + zoom);
   }
-  
+
   var url;
   if (typeof request.body.result.parameters.url !== "undefined") {
     url = request.body.result.parameters.url;
@@ -142,31 +142,31 @@ exports.chromeControl = (request, response) => {
           } else {
             switch (action) {
               case "close_tab":
-                app.ask("Closing tab!");
+                app.tell("Closing tab!");
                 break;
               case "go_back":
-                app.ask("Going back!");
+                app.tell("Going back!");
                 break;
               case "go_forward":
-                app.ask("Going forward!");
+                app.tell("Going forward!");
                 break;
               case "new_tab":
-                app.ask("Opening new tab!");
+                app.tell("Opening new tab!");
                 break;
               case "scroll_up":
-                app.ask("Scrolling up!");
+                app.tell("Scrolling up!");
                 break;
               case "scroll_up_full":
-                app.ask("Scrolling all the way up!");
+                app.tell("Scrolling all the way up!");
                 break;
               case "scroll_down":
-                app.ask("Scrolling down!");
+                app.tell("Scrolling down!");
                 break;
               case "scroll_down_full":
-                app.ask("Scrolling all the way down!");
+                app.tell("Scrolling all the way down!");
                 break;
               case "create_bookmark":
-                app.ask("Bookmarking your current tab!");
+                app.tell("Bookmarking your current tab!");
                 break;
               case "google_search":
                 gRef.update({
@@ -175,7 +175,7 @@ exports.chromeControl = (request, response) => {
                   if (error) {
                     console.log("Data could not be saved (query save): " + error);
                   } else {
-                    app.ask("Searching Google now!");
+                    app.tell("Searching Google now!");
                   }
                 });
                 break;
@@ -186,7 +186,7 @@ exports.chromeControl = (request, response) => {
                   if (error) {
                     console.log("Data could not be saved (query save): " + error);
                   } else {
-                    app.ask("Searching StackOverflow now!");
+                    app.tell("Searching StackOverflow now!");
                   }
                 });
                 break;
@@ -197,7 +197,7 @@ exports.chromeControl = (request, response) => {
                   if (error) {
                     console.log("Data could not be saved (query save): " + error);
                   } else {
-                    app.ask("Searching YouTube now!");
+                    app.tell("Searching YouTube now!");
                   }
                 });
                 break;
@@ -208,7 +208,7 @@ exports.chromeControl = (request, response) => {
                   if (error) {
                     console.log("Data could not be saved (query save): " + error);
                   } else {
-                    app.ask("Zooming " + zoom + " now!");
+                    app.tell("Zooming " + zoom + " now!");
                   }
                 });
                 break;
@@ -219,7 +219,7 @@ exports.chromeControl = (request, response) => {
                   if (error) {
                     console.log("Data could not be saved (query save): " + error);
                   } else {
-                    app.ask("Going to " + url + " now!");
+                    app.tell("Going to " + url + " now!");
                   }
                 });
                 break;
