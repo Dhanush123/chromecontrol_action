@@ -249,11 +249,11 @@ exports.chromeControl = (request, response) => {
       "Greetings! What would you like to do on Chrome today?"
     ];
 
-    var noInputGreets = {
+    var noInputGreets = [
      "You can say something like: open new tab, zoom in, or search YouTube for cat videos",
      "You can say something like: refresh page, go back, or scroll down",
      "You can say something like: go to facebook.com, bookmark this page, or scroll all the way up",
-    }
+    ];
     //Math.floor(Math.random() * (max - min + 1)) + min <-- from Mozilla
     const inputPrompt = app.buildInputPrompt(false, mainGreets[Math.floor(Math.random() * 4)], noInputGreets);
     app.ask(inputPrompt);
