@@ -255,7 +255,10 @@ exports.chromeControl = (request, response) => {
      "You can say something like: go to facebook.com, bookmark this page, or scroll all the way up",
     ];
     //Math.floor(Math.random() * (max - min + 1)) + min <-- from Mozilla
-    const inputPrompt = app.buildInputPrompt(false, mainGreets[Math.floor(Math.random() * 4)], noInputGreets);
+    // const inputPrompt = app.buildInputPrompt(false, mainGreets[Math.floor(Math.random() * 4)], noInputGreets);
+    // app.ask(inputPrompt);
+    const inputPrompt = app.buildInputPrompt(false, 'Welcome to action snippets! Say a number.',
+    ['Say any number', 'Pick a number', 'What is the number?']);
     app.ask(inputPrompt);
   }
 
