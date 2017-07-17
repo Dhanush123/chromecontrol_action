@@ -168,6 +168,9 @@ exports.chromeControl = (request, response) => {
               case "create_bookmark":
                 app.tell("Bookmarking your current tab!");
                 break;
+              case "refresh_page":
+                app.tell("Refreshing tab now!");
+                break;
               case "google_search":
                 gRef.update({
                   googleQuery: query
@@ -253,6 +256,7 @@ exports.chromeControl = (request, response) => {
   actionMap.set("zoom", funcController);
   actionMap.set("website_search", funcController);
   actionMap.set("create_bookmark", funcController);
+  actionMap.set("refresh_page", funcController);
   app.handleRequest(actionMap);
 }
 // [END YourAction]
