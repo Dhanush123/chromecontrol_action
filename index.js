@@ -245,6 +245,7 @@ exports.chromeControl = (request, response) => {
   }
 
   function greetUser(app) {
+    console.log("in greetUser function!!!!");
     var mainGreets = [
       "Hi! What action do you want to take on Chrome?",
       "Hello! How do you want to use Chrome?",
