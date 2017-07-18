@@ -268,7 +268,8 @@ exports.chromeControl = (request, response) => {
                     if(windowType == "current"){
                       app.ask("Closing current window now!");
                     }
-                    else { //windowType is either current or all
+                    else {
+                       //windowType is either current or all
                       app.ask("Closing all windows now!");
                     }
                   }
