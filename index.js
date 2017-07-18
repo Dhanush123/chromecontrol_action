@@ -259,7 +259,7 @@ exports.chromeControl = (request, response) => {
     app.ask(inputPrompt);
     // const inputPrompt = app.buildInputPrompt(false, 'Welcome to action snippets! Say a number.',
     // ['Say any number', 'Pick a number', 'What is the number?']);
-    app.ask(inputPrompt);
+    // app.ask(inputPrompt);
   }
 
   const actionMap = new Map();
@@ -278,7 +278,7 @@ exports.chromeControl = (request, response) => {
   actionMap.set("website_search", funcController);
   actionMap.set("create_bookmark", funcController);
   actionMap.set("reload_page", funcController);
-  actionMap.set(app.StandardIntents.MAIN, greetUser);
+  actionMap.set("input.welcome", greetUser);
   app.handleRequest(actionMap);
 }
 // [END YourAction]
