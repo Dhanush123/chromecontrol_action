@@ -49,6 +49,12 @@ exports.chromeControl = (request, response) => {
     console.log("api.ai website search url query: " + url);
   }
 
+  var linkNum;
+  if (typeof request.body.result.parameters.link_number !== "undefined") {
+    linkNum = request.body.result.parameters.link_number;
+    console.log("api.ai linkNum query: " + linkNum);
+  }
+
   var user = app.getUser();
   oauth2Client.setCredentials({
     access_token: user.accessToken
@@ -229,6 +235,17 @@ exports.chromeControl = (request, response) => {
                   }
                 });
                 break;
+              case "open_link":
+                gRef.update({
+                  linkNumber: linkNum
+                }, function(error) {
+                  if (error) {
+                    console.log("Data could not be saved (query save): " + error);
+                  } else {
+                    app.ask("Opening link " + linkNum + " now!");
+                  }
+                });
+                break;
               default:
                 app.tell("Uh oh, something went wrong in following your instructions!");
             }
@@ -279,6 +296,7 @@ exports.chromeControl = (request, response) => {
   actionMap.set("create_bookmark", funcController);
   actionMap.set("reload_page", funcController);
   actionMap.set("show_links", funcController);
+  actionMap.set("open_link", funcController);
   actionMap.set("input.welcome", greetUser);
   app.handleRequest(actionMap);
 }
