@@ -180,6 +180,9 @@ exports.chromeControl = (request, response) => {
               case "show_links":
                 app.ask("Showing all links on page now!");
                 break;
+              case "show_links":
+                app.ask("Removing page highlighting now!");
+                break;
               case "google_search":
                 gRef.update({
                   googleQuery: query
@@ -297,6 +300,7 @@ exports.chromeControl = (request, response) => {
   actionMap.set("reload_page", funcController);
   actionMap.set("show_links", funcController);
   actionMap.set("open_link", funcController);
+  actionMap.set("remove_links", funcController);
   actionMap.set("input.welcome", greetUser);
   app.handleRequest(actionMap);
 }
