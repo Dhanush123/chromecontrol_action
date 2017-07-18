@@ -297,7 +297,7 @@ exports.chromeControl = (request, response) => {
   actionMap.set("website_search", funcController);
   actionMap.set("create_bookmark", funcController);
   actionMap.set("reload_page", funcController);
-  // actionMap.set("input.welcome", greetUser);
+  actionMap.set("input.welcome", funcController);
   app.handleRequest(actionMap);
 }
 // [END YourAction]
