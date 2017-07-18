@@ -37,23 +37,24 @@ exports.chromeControl = (request, response) => {
     query = request.body.result.parameters.any;
     console.log("api.ai [google | stackoverflow | youtube] search query: " + query);
   }
-  var zoom;
-  if (typeof request.body.result.parameters.zoom !== "undefined") {
-    zoom = request.body.result.parameters.zoom;
-    console.log("api.ai zoom query: " + zoom);
-  }
 
-  var url;
-  if (typeof request.body.result.parameters.url !== "undefined") {
-    url = request.body.result.parameters.url;
-    console.log("api.ai website search url query: " + url);
-  }
+  // var zoom;
+  // if (typeof request.body.result.parameters.zoom !== "undefined") {
+  //   zoom = request.body.result.parameters.zoom;
+  //   console.log("api.ai zoom query: " + zoom);
+  // }
 
-  var linkNum;
-  if (typeof request.body.result.parameters.link_number !== "undefined") {
-    linkNum = request.body.result.parameters.link_number;
-    console.log("api.ai linkNum query: " + linkNum);
-  }
+  // var url;
+  // if (typeof request.body.result.parameters.url !== "undefined") {
+  //   url = request.body.result.parameters.url;
+  //   console.log("api.ai website search url query: " + url);
+  // }
+
+  // var linkNum;
+  // if (typeof request.body.result.parameters.link_number !== "undefined") {
+  //   linkNum = request.body.result.parameters.link_number;
+  //   console.log("api.ai linkNum query: " + linkNum);
+  // }
 
   var user = app.getUser();
   oauth2Client.setCredentials({
@@ -217,6 +218,8 @@ exports.chromeControl = (request, response) => {
                 });
                 break;
               case "zoom":
+                var zoom = request.body.result.parameters.zoom;
+                console.log("api.ai zoom query: " + zoom);
                 gRef.update({
                   zoomType: zoom
                 }, function(error) {
@@ -228,6 +231,8 @@ exports.chromeControl = (request, response) => {
                 });
                 break;
               case "website_search":
+                var url = request.body.result.parameters.url;
+                console.log("api.ai website search url query: " + url);
                 gRef.update({
                   websiteUrl: url
                 }, function(error) {
@@ -239,6 +244,8 @@ exports.chromeControl = (request, response) => {
                 });
                 break;
               case "open_link":
+                var linkNum = request.body.result.parameters.link_number;
+                console.log("api.ai linkNum query: " + linkNum);
                 gRef.update({
                   linkNumber: linkNum
                 }, function(error) {
@@ -246,6 +253,24 @@ exports.chromeControl = (request, response) => {
                     console.log("Data could not be saved (query save): " + error);
                   } else {
                     app.ask("Opening link " + linkNum + " now!");
+                  }
+                });
+                break;
+              case "close_window":
+                var windowType = request.body.result.parameters.window;
+                console.log("api.ai windowType query: " + windowType);
+                gRef.update({
+                  windowType: windowType
+                }, function(error) {
+                  if (error) {
+                    console.log("Data could not be saved (query save): " + error);
+                  } else {
+                    if(windowType == "current"){
+                      app.ask("Closing current window now!");
+                    }
+                    else { //windowType is either current or all
+                      app.ask("Closing all windows now!");
+                    }
                   }
                 });
                 break;
@@ -301,6 +326,7 @@ exports.chromeControl = (request, response) => {
   actionMap.set("show_links", funcController);
   actionMap.set("open_link", funcController);
   actionMap.set("remove_links", funcController);
+  actionMap.set("close_window", funcController);
   actionMap.set("input.welcome", greetUser);
   app.handleRequest(actionMap);
 }
