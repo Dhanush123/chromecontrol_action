@@ -184,6 +184,9 @@ exports.chromeControl = (request, response) => {
               case "remove_links":
                 app.ask("Removing page highlighting now!");
                 break;
+              case "restore_window":
+                app.ask("Restoring the most recently closed window!");
+                break;
               case "google_search":
                 gRef.update({
                   googleQuery: query
@@ -328,6 +331,7 @@ exports.chromeControl = (request, response) => {
   actionMap.set("open_link", funcController);
   actionMap.set("remove_links", funcController);
   actionMap.set("close_window", funcController);
+  actionMap.set("restore_window", funcController);
   actionMap.set("input.welcome", greetUser);
   app.handleRequest(actionMap);
 }
