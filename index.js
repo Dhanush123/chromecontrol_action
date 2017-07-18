@@ -180,7 +180,7 @@ exports.chromeControl = (request, response) => {
               case "show_links":
                 app.ask("Showing all links on page now!");
                 break;
-              case "show_links":
+              case "remove_links":
                 app.ask("Removing page highlighting now!");
                 break;
               case "google_search":
