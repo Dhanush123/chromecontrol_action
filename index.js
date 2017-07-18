@@ -172,7 +172,7 @@ exports.chromeControl = (request, response) => {
                 app.ask("Reloading tab now!");
                 break;
               case "show_links":
-                app.ask("Reloading tab now!");
+                app.ask("Showing all links on page now!");
                 break;
               case "google_search":
                 gRef.update({
