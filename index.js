@@ -215,7 +215,7 @@ exports.chromeControl = (request, response) => {
           case "close_window":
             var windowType = request.body.result.parameters.window;
             console.log("api.ai windowType query: " + windowType);
-            params.windowType: windowType
+            params.windowType = windowType;
             if(windowType == "current"){
               app.ask("Closing current window now!");
             }
@@ -232,14 +232,6 @@ exports.chromeControl = (request, response) => {
             app.tell("Unfortunately I wasn't able to connect to the Chrome Control database right now. Please try again later.");
           }
         });
-        // gRef.update({
-        //   "command": action
-        // }, function(error) {
-        //   if (error) {
-        //     console.log("Data could not be saved: " + error);
-        //   } else {
-        //   }
-        // });
       }
     }, function(errorObject) {
       console.log("Firebase user (read) read failed: " + errorObject.code);
