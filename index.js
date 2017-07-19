@@ -141,148 +141,105 @@ exports.chromeControl = (request, response) => {
         app.tell("Hey! It seems like you haven't installed the \"Chrome Control\" Chrome Extension in your Google Chrome browser yet. Can you come back after you've done that?");
       } else {
         var gRef = admin.database().ref("users/" + gUser.id);
-        gRef.update({
-          "command": action
-        }, function(error) {
+        var params = {"command": action};
+        switch (action) {
+          case "close_tab":
+            app.ask("Closing tab!");
+            break;
+          case "go_back":
+            app.ask("Going back!");
+            break;
+          case "go_forward":
+            app.ask("Going forward!");
+            break;
+          case "new_tab":
+            app.ask("Opening new tab!");
+            break;
+          case "scroll_up":
+            app.ask("Scrolling up!");
+            break;
+          case "scroll_up_full":
+            app.ask("Scrolling all the way up!");
+            break;
+          case "scroll_down":
+            app.ask("Scrolling down!");
+            break;
+          case "scroll_down_full":
+            app.ask("Scrolling all the way down!");
+            break;
+          case "create_bookmark":
+            app.ask("Bookmarking your current tab!");
+            break;
+          case "reload_page":
+            app.ask("Reloading tab now!");
+            break;
+          case "show_links":
+            app.ask("Showing all links on page now!");
+            break;
+          case "remove_links":
+            app.ask("Removing page highlighting now!");
+            break;
+          case "restore_window":
+            app.ask("Restoring the most recently closed window!");
+            break;
+          case "google_search":
+            params.googleQuery = query;
+            app.ask("Searching Google now!");
+            break;
+          case "stackoverflow_search":
+            params.stackoverflowQuery = query;
+            app.ask("Searching StackOverflow now!");
+            break;
+          case "youtube_search":
+            params.youtubeQuery = query;
+            app.ask("Searching YouTube now!");
+            break;
+          case "zoom":
+            var zoom = request.body.result.parameters.zoom;
+            console.log("api.ai zoom query: " + zoom);
+            params.zoomType = zoom;
+            app.ask("Zooming " + zoom + " now!");
+            break;
+          case "website_search":
+            var url = request.body.result.parameters.url;
+            console.log("api.ai website search url query: " + url);
+            params.websiteUrl = url;
+            app.ask("Going to " + url + " now!");
+            break;
+          case "open_link":
+            var linkNum = request.body.result.parameters.link_number;
+            console.log("api.ai linkNum query: " + linkNum);
+            params.linkNumber = linkNum;
+            app.ask("Opening link " + linkNum + " now!");
+            break;
+          case "close_window":
+            var windowType = request.body.result.parameters.window;
+            console.log("api.ai windowType query: " + windowType);
+            params.windowType: windowType
+            if(windowType == "current"){
+              app.ask("Closing current window now!");
+            }
+            else {
+              app.ask("Closing all windows now!"); //windowType is either current or all
+            }
+            break;
+          default:
+            app.tell("I appreciate the enthusiasm, but I don't think this is a feature my creator has given me yet! You can ask my creator to implement it by emailing the developer email found in the Chrome Control Google Actions listing.");
+        }
+        gRef.update(params, function(error) {
           if (error) {
             console.log("Data could not be saved: " + error);
-          } else {
-            switch (action) {
-              case "close_tab":
-                app.ask("Closing tab!");
-                break;
-              case "go_back":
-                app.ask("Going back!");
-                break;
-              case "go_forward":
-                app.ask("Going forward!");
-                break;
-              case "new_tab":
-                app.ask("Opening new tab!");
-                break;
-              case "scroll_up":
-                app.ask("Scrolling up!");
-                break;
-              case "scroll_up_full":
-                app.ask("Scrolling all the way up!");
-                break;
-              case "scroll_down":
-                app.ask("Scrolling down!");
-                break;
-              case "scroll_down_full":
-                app.ask("Scrolling all the way down!");
-                break;
-              case "create_bookmark":
-                app.ask("Bookmarking your current tab!");
-                break;
-              case "reload_page":
-                app.ask("Reloading tab now!");
-                break;
-              case "show_links":
-                app.ask("Showing all links on page now!");
-                break;
-              case "remove_links":
-                app.ask("Removing page highlighting now!");
-                break;
-              case "restore_window":
-                app.ask("Restoring the most recently closed window!");
-                break;
-              case "google_search":
-                gRef.update({
-                  googleQuery: query
-                }, function(error) {
-                  if (error) {
-                    console.log("Data could not be saved (query save): " + error);
-                  } else {
-                    app.ask("Searching Google now!");
-                  }
-                });
-                break;
-              case "stackoverflow_search":
-                gRef.update({
-                  stackoverflowQuery: query
-                }, function(error) {
-                  if (error) {
-                    console.log("Data could not be saved (query save): " + error);
-                  } else {
-                    app.ask("Searching StackOverflow now!");
-                  }
-                });
-                break;
-              case "youtube_search":
-                gRef.update({
-                  youtubeQuery: query
-                }, function(error) {
-                  if (error) {
-                    console.log("Data could not be saved (query save): " + error);
-                  } else {
-                    app.ask("Searching YouTube now!");
-                  }
-                });
-                break;
-              case "zoom":
-                var zoom = request.body.result.parameters.zoom;
-                console.log("api.ai zoom query: " + zoom);
-                gRef.update({
-                  zoomType: zoom
-                }, function(error) {
-                  if (error) {
-                    console.log("Data could not be saved (query save): " + error);
-                  } else {
-                    app.ask("Zooming " + zoom + " now!");
-                  }
-                });
-                break;
-              case "website_search":
-                var url = request.body.result.parameters.url;
-                console.log("api.ai website search url query: " + url);
-                gRef.update({
-                  websiteUrl: url
-                }, function(error) {
-                  if (error) {
-                    console.log("Data could not be saved (query save): " + error);
-                  } else {
-                    app.ask("Going to " + url + " now!");
-                  }
-                });
-                break;
-              case "open_link":
-                var linkNum = request.body.result.parameters.link_number;
-                console.log("api.ai linkNum query: " + linkNum);
-                gRef.update({
-                  linkNumber: linkNum
-                }, function(error) {
-                  if (error) {
-                    console.log("Data could not be saved (query save): " + error);
-                  } else {
-                    app.ask("Opening link " + linkNum + " now!");
-                  }
-                });
-                break;
-              case "close_window":
-                var windowType = request.body.result.parameters.window;
-                console.log("api.ai windowType query: " + windowType);
-                gRef.update({
-                  windowType: windowType
-                }, function(error) {
-                  if (error) {
-                    console.log("Data could not be saved (query save): " + error);
-                  } else {
-                    if(windowType == "current"){
-                      app.ask("Closing current window now!");
-                    }
-                    else {
-                       //windowType is either current or all
-                      app.ask("Closing all windows now!");
-                    }
-                  }
-                });
-                break;
-              default:
-                app.tell("Uh oh, something went wrong in following your instructions!");
-            }
+            app.tell("Unfortunately I wasn't able to connect to the Chrome Control database right now. Please try again later.");
           }
         });
+        // gRef.update({
+        //   "command": action
+        // }, function(error) {
+        //   if (error) {
+        //     console.log("Data could not be saved: " + error);
+        //   } else {
+        //   }
+        // });
       }
     }, function(errorObject) {
       console.log("Firebase user (read) read failed: " + errorObject.code);
