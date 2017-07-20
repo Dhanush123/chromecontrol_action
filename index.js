@@ -260,6 +260,10 @@ exports.chromeControl = (request, response) => {
     app.ask(mainGreets[Math.floor(Math.random() * 4)], noInputGreets);
   }
 
+  function unknownHandle(app) {
+    app.ask("I apologize. Currently I don't know to help you " + app.getRawInput() + "on Chrome. I'm constantly learning new actions, so please try again later if you intended to request that action. What other action can I help you take on Chrome?");
+  }
+
   const actionMap = new Map();
   actionMap.set("close_tab", funcController);
   actionMap.set("go_back", funcController);
@@ -282,6 +286,7 @@ exports.chromeControl = (request, response) => {
   actionMap.set("close_window", funcController);
   actionMap.set("restore_window", funcController);
   actionMap.set("input.welcome", greetUser);
+  actionMap.set("input.unknown", unknownHandle);
   app.handleRequest(actionMap);
 }
 // [END YourAction]
