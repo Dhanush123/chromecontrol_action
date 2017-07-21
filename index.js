@@ -1,4 +1,4 @@
-"use strict";
+Browser Control"use strict";
 
 process.env.DEBUG = "actions-on-google:*";
 const App = require("actions-on-google").ApiAiApp;
@@ -138,7 +138,7 @@ exports.chromeControl = (request, response) => {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
       console.log("snapshot.val()[" + gUser.id + "].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
       if (!snapshot.val()[gUser.id].chromeLoggedIn) {
-        app.tell("Hey! It seems like you haven't installed the \"Chrome Control\" Chrome Extension in your Google Chrome browser yet. Can you come back after you've done that?");
+        app.tell("Hey! It seems like you haven't installed the \"Browser Control\" Chrome Extension in your Google Chrome browser yet. Can you come back after you've done that?");
       } else {
         var gRef = admin.database().ref("users/" + gUser.id);
         var params = {"command": action};
@@ -224,12 +224,12 @@ exports.chromeControl = (request, response) => {
             }
             break;
           default:
-            app.tell("I appreciate the enthusiasm, but I don't think this is a feature my creator has given me yet! You can ask my creator to implement it by emailing the developer email found in the Chrome Control Google Actions listing.");
+            app.tell("I appreciate the enthusiasm, but I don't think this is a feature my creator has given me yet! You can ask my creator to implement it by emailing the developer email found in the Browser Control Google Actions listing.");
         }
         gRef.update(params, function(error) {
           if (error) {
             console.log("Data could not be saved: " + error);
-            app.tell("Unfortunately I wasn't able to connect to the Chrome Control database right now. Please try again later.");
+            app.tell("Unfortunately I wasn't able to connect to the Browser Control database right now. Please try again later.");
           }
         });
       }
