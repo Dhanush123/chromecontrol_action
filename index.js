@@ -1,4 +1,4 @@
-Browser Control"use strict";
+"use strict";
 
 process.env.DEBUG = "actions-on-google:*";
 const App = require("actions-on-google").ApiAiApp;
