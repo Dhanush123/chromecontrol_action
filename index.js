@@ -226,7 +226,6 @@ exports.chromeControl = (request, response) => {
           default:
             app.tell("I appreciate the enthusiasm, but I don't think this is a feature my creator has given me yet! You can ask my creator to implement it by emailing the developer email found in the Browser Control Google Actions listing.");
         }
-        app.ask("What other action can I help you take on Chrome?");
         gRef.update(params, function(error) {
           if (error) {
             console.log("Data could not be saved: " + error);
