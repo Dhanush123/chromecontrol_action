@@ -139,89 +139,89 @@ exports.chromeControl = (request, response) => {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
       console.log("snapshot.val()[" + gUser.id + "].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
       if (!snapshot.val()[gUser.id].chromeLoggedIn) {
-        displayMsg = "Hey! It seems like you haven't installed the \"Browser Control\" Chrome Extension in your Google Chrome browser yet. Please come back after you've done that.");
+        displayMsg = "Hey! It seems like you haven't installed the \"Browser Control\" Chrome Extension in your Google Chrome browser yet. Please come back after you've done that.";
       } else {
         var gRef = admin.database().ref("users/" + gUser.id);
         var params = {"command": action};
         switch (action) {
           case "close_tab":
-            displayMsg = "Closing tab!");
+            displayMsg = "Closing tab!";
             break;
           case "go_back":
-            displayMsg = "Going back!");
+            displayMsg = "Going back!";
             break;
           case "go_forward":
-            displayMsg = "Going forward!");
+            displayMsg = "Going forward!";
             break;
           case "new_tab":
-            displayMsg = "Opening new tab!");
+            displayMsg = "Opening new tab!";
             break;
           case "scroll_up":
-            displayMsg = "Scrolling up!");
+            displayMsg = "Scrolling up!";
             break;
           case "scroll_up_full":
-            displayMsg = "Scrolling all the way up!");
+            displayMsg = "Scrolling all the way up!";
             break;
           case "scroll_down":
-            displayMsg = "Scrolling down!");
+            displayMsg = "Scrolling down!";
             break;
           case "scroll_down_full":
-            displayMsg = "Scrolling all the way down!");
+            displayMsg = "Scrolling all the way down!";
             break;
           case "create_bookmark":
-            displayMsg = "Bookmarking your current tab!");
+            displayMsg = "Bookmarking your current tab!";
             break;
           case "reload_page":
-            displayMsg = "Reloading tab now!");
+            displayMsg = "Reloading tab now!";
             break;
           case "show_links":
-            displayMsg = "Showing all links on page now!");
+            displayMsg = "Showing all links on page now!";
             break;
           case "remove_links":
-            displayMsg = "Removing page highlighting now!");
+            displayMsg = "Removing page highlighting now!";
             break;
           case "restore_window":
-            displayMsg = "Restoring the most recently closed window!");
+            displayMsg = "Restoring the most recently closed window!";
             break;
           case "google_search":
             params.googleQuery = query;
-            displayMsg = "Searching Google now!");
+            displayMsg = "Searching Google now!";
             break;
           case "stackoverflow_search":
             params.stackoverflowQuery = query;
-            displayMsg = "Searching StackOverflow now!");
+            displayMsg = "Searching StackOverflow now!";
             break;
           case "youtube_search":
             params.youtubeQuery = query;
-            displayMsg = "Searching YouTube now!");
+            displayMsg = "Searching YouTube now!";
             break;
           case "zoom":
             var zoom = request.body.result.parameters.zoom;
             console.log("api.ai zoom query: " + zoom);
             params.zoomType = zoom;
-            displayMsg = "Zooming " + zoom + " now!");
+            displayMsg = "Zooming " + zoom + " now!";
             break;
           case "website_search":
             var url = request.body.result.parameters.url;
             console.log("api.ai website search url query: " + url);
             params.websiteUrl = url;
-            displayMsg = "Going to " + url + " now!");
+            displayMsg = "Going to " + url + " now!";
             break;
           case "open_link":
             var linkNum = request.body.result.parameters.link_number;
             console.log("api.ai linkNum query: " + linkNum);
             params.linkNumber = linkNum;
-            displayMsg = "Opening link " + linkNum + " now!");
+            displayMsg = "Opening link " + linkNum + " now!";
             break;
           case "close_window":
             var windowType = request.body.result.parameters.window;
             console.log("api.ai windowType query: " + windowType);
             params.windowType = windowType;
             if(windowType == "current"){
-              displayMsg = "Closing current window now!");
+              displayMsg = "Closing current window now!";
             }
             else {
-              displayMsg = "Closing all windows now!"); //windowType is either current or all
+              displayMsg = "Closing all windows now!"; //windowType is either current or all
             }
             break;
           default:
