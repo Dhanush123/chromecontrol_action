@@ -245,7 +245,7 @@ exports.chromeControl = (request, response) => {
   }
 
   function getSampleCommands() {
-    var list = [
+    var listy = [
      "You can say something like: open new tab, zoom in, or search YouTube for cat videos",
      "You can say something like: refresh page, go back, or scroll down",
      "You can say something like: go to facebook.com, bookmark this page, or scroll all the way up",
@@ -254,9 +254,9 @@ exports.chromeControl = (request, response) => {
      "You can say something like: restore last window, close current window, or search StackOverflow for Android RelativeLayout",
      "You can say something like: zoom in, zoom out, or close all windows"
     ];
-    list.sort(function(a, b){return 0.5 - Math.random()}); //https://www.w3schools.com/js/js_array_sort.asp
-    var subList = list.slice(0,2);
-    sublist[2] = "Thank you for using Chrome Control. Talk to you later!"
+    listy.sort(function(a, b){return 0.5 - Math.random()}); //https://www.w3schools.com/js/js_array_sort.asp
+    var subList = listy.slice(0,2);
+    subList[2] = "Thank you for using Chrome Control. Talk to you later!"
     return subList;
   }
 
