@@ -134,98 +134,100 @@ exports.chromeControl = (request, response) => {
 
   function checkChromeStatus(app) {
     var ref = admin.database().ref("users");
+    var displayMsg;
     ref.once("value", function(snapshot) {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
       console.log("snapshot.val()[" + gUser.id + "].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
       if (!snapshot.val()[gUser.id].chromeLoggedIn) {
-        app.tell("Hey! It seems like you haven't installed the \"Browser Control\" Chrome Extension in your Google Chrome browser yet. Please come back after you've done that.");
+        displayMsg = "Hey! It seems like you haven't installed the \"Browser Control\" Chrome Extension in your Google Chrome browser yet. Please come back after you've done that.");
       } else {
         var gRef = admin.database().ref("users/" + gUser.id);
         var params = {"command": action};
         switch (action) {
           case "close_tab":
-            app.tell("Closing tab!");
+            displayMsg = "Closing tab!");
             break;
           case "go_back":
-            app.tell("Going back!");
+            displayMsg = "Going back!");
             break;
           case "go_forward":
-            app.tell("Going forward!");
+            displayMsg = "Going forward!");
             break;
           case "new_tab":
-            app.tell("Opening new tab!");
+            displayMsg = "Opening new tab!");
             break;
           case "scroll_up":
-            app.tell("Scrolling up!");
+            displayMsg = "Scrolling up!");
             break;
           case "scroll_up_full":
-            app.tell("Scrolling all the way up!");
+            displayMsg = "Scrolling all the way up!");
             break;
           case "scroll_down":
-            app.tell("Scrolling down!");
+            displayMsg = "Scrolling down!");
             break;
           case "scroll_down_full":
-            app.tell("Scrolling all the way down!");
+            displayMsg = "Scrolling all the way down!");
             break;
           case "create_bookmark":
-            app.tell("Bookmarking your current tab!");
+            displayMsg = "Bookmarking your current tab!");
             break;
           case "reload_page":
-            app.tell("Reloading tab now!");
+            displayMsg = "Reloading tab now!");
             break;
           case "show_links":
-            app.tell("Showing all links on page now!");
+            displayMsg = "Showing all links on page now!");
             break;
           case "remove_links":
-            app.tell("Removing page highlighting now!");
+            displayMsg = "Removing page highlighting now!");
             break;
           case "restore_window":
-            app.tell("Restoring the most recently closed window!");
+            displayMsg = "Restoring the most recently closed window!");
             break;
           case "google_search":
             params.googleQuery = query;
-            app.tell("Searching Google now!");
+            displayMsg = "Searching Google now!");
             break;
           case "stackoverflow_search":
             params.stackoverflowQuery = query;
-            app.tell("Searching StackOverflow now!");
+            displayMsg = "Searching StackOverflow now!");
             break;
           case "youtube_search":
             params.youtubeQuery = query;
-            app.tell("Searching YouTube now!");
+            displayMsg = "Searching YouTube now!");
             break;
           case "zoom":
             var zoom = request.body.result.parameters.zoom;
             console.log("api.ai zoom query: " + zoom);
             params.zoomType = zoom;
-            app.tell("Zooming " + zoom + " now!");
+            displayMsg = "Zooming " + zoom + " now!");
             break;
           case "website_search":
             var url = request.body.result.parameters.url;
             console.log("api.ai website search url query: " + url);
             params.websiteUrl = url;
-            app.tell("Going to " + url + " now!");
+            displayMsg = "Going to " + url + " now!");
             break;
           case "open_link":
             var linkNum = request.body.result.parameters.link_number;
             console.log("api.ai linkNum query: " + linkNum);
             params.linkNumber = linkNum;
-            app.tell("Opening link " + linkNum + " now!");
+            displayMsg = "Opening link " + linkNum + " now!");
             break;
           case "close_window":
             var windowType = request.body.result.parameters.window;
             console.log("api.ai windowType query: " + windowType);
             params.windowType = windowType;
             if(windowType == "current"){
-              app.tell("Closing current window now!");
+              displayMsg = "Closing current window now!");
             }
             else {
-              app.tell("Closing all windows now!"); //windowType is either current or all
+              displayMsg = "Closing all windows now!"); //windowType is either current or all
             }
             break;
           default:
             app.tell("I appreciate the enthusiasm, but I don't think this is a feature my creator has given me yet! You can ask my creator to implement it by emailing the developer email found in the Browser Control Google Actions listing.");
         }
+        app.ask(displayMsg,getSampleCommands());
         gRef.update(params, function(error) {
           if (error) {
             console.log("Data could not be saved: " + error);
@@ -242,8 +244,25 @@ exports.chromeControl = (request, response) => {
     var msg = getGUser(checkUserInFB, app);
   }
 
+  function getSampleCommands() {
+    var list = [
+     "You can say something like: open new tab, zoom in, or search YouTube for cat videos",
+     "You can say something like: refresh page, go back, or scroll down",
+     "You can say something like: go to facebook.com, bookmark this page, or scroll all the way up",
+     "You can say something like: close tab, go forward, or search Google for how to fix a flat tire",
+     "You can say something like: highlight all links on page, click on link 2, or remove links highlighting",
+     "You can say something like: restore last window, close current window, or search StackOverflow for Android RelativeLayout",
+     "You can say something like: zoom in, zoom out, or close all windows"
+    ];
+    list.sort(function(a, b){return 0.5 - Math.random()}); //https://www.w3schools.com/js/js_array_sort.asp
+    var subList = list.slice(0,2);
+    sublist[2] = "Thank you for using Chrome Control. Talk to you later!"
+    return subList;
+  }
+
   function greetUser(app) {
     console.log("in greetUser function!!!!");
+
     var mainGreets = [
       "Hi! What action do you want to take on Chrome?",
       "Hello! How do you want to use Chrome?",
@@ -251,13 +270,7 @@ exports.chromeControl = (request, response) => {
       "Greetings! What would you like to do on Chrome today?"
     ];
 
-    const noInputGreets = [
-     "You can say something like: open new tab, zoom in, or search YouTube for cat videos",
-     "You can say something like: refresh page, go back, or scroll down",
-     "You can say something like: go to facebook.com, bookmark this page, or scroll all the way up",
-    ];
-    //Math.floor(Math.random() * (max - min + 1)) + min <-- from Mozilla
-    app.ask(mainGreets[Math.floor(Math.random() * 4)], noInputGreets);
+    app.ask(mainGreets[Math.floor(Math.random() * 4)], getSampleCommands()); //Math.floor(Math.random() * (max - min + 1)) + min <-- from Mozilla
   }
 
   function unknownHandle(app) {
