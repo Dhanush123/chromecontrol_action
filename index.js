@@ -39,24 +39,6 @@ exports.chromeControl = (request, response) => {
     console.log("api.ai [google | stackoverflow | youtube] search query: " + query);
   }
 
-  // var zoom;
-  // if (typeof request.body.result.parameters.zoom !== "undefined") {
-  //   zoom = request.body.result.parameters.zoom;
-  //   console.log("api.ai zoom query: " + zoom);
-  // }
-
-  // var url;
-  // if (typeof request.body.result.parameters.url !== "undefined") {
-  //   url = request.body.result.parameters.url;
-  //   console.log("api.ai website search url query: " + url);
-  // }
-
-  // var linkNum;
-  // if (typeof request.body.result.parameters.link_number !== "undefined") {
-  //   linkNum = request.body.result.parameters.link_number;
-  //   console.log("api.ai linkNum query: " + linkNum);
-  // }
-
   var user = app.getUser();
   oauth2Client.setCredentials({
     access_token: user.accessToken
@@ -228,7 +210,7 @@ exports.chromeControl = (request, response) => {
           default:
             app.tell("I appreciate the enthusiasm, but I don't think this is a feature my creator has given me yet! You can ask my creator to implement it by emailing the developer email found in the Browser Control Google Actions listing.");
         }
-        app.ask(displayMsg,getSampleCommands());
+        app.ask(displayMsg + " What else can I do for you on Chrome?",getSampleCommands());
         gRef.update(params, function(error) {
           if (error) {
             console.log("Data could not be saved: " + error);
