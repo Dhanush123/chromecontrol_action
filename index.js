@@ -166,7 +166,7 @@ exports.chromeControl = (request, response) => {
               console.log("api.ai sites_search query: " + request.body.result.parameters.any);
               params.siteQuery = request.body.result.parameters.any;
             }
-            displayMsg = "Opening " + params.popSites + " now!";
+            displayMsg = "Opening " + request.body.result.parameters.siteName + " now!";
             params.siteName = request.body.result.parameters.siteName;
             break;
           case "zoom":
