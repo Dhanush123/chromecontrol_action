@@ -28,16 +28,10 @@ exports.chromeControl = (request, response) => {
   });
   //change
 
-  console.log("Request headers: " + JSON.stringify(request.headers));
+  //console.log("Request headers: " + JSON.stringify(request.headers));
   console.log("Request body: " + JSON.stringify(request.body));
   console.log("api.ai action was: " + request.body.result.action);
   action = request.body.result.action;
-
-  var query;
-  if (typeof request.body.result.parameters.any !== "undefined") {
-    query = request.body.result.parameters.any;
-    console.log("api.ai [google | stackoverflow | youtube] search query: " + query);
-  }
 
   var user = app.getUser();
   oauth2Client.setCredentials({
@@ -167,17 +161,13 @@ exports.chromeControl = (request, response) => {
           case "restore_window":
             displayMsg = "Restoring the most recently closed window!";
             break;
-          case "google_search":
-            params.googleQuery = query;
-            displayMsg = "Searching Google now!";
-            break;
-          case "stackoverflow_search":
-            params.stackoverflowQuery = query;
-            displayMsg = "Searching StackOverflow now!";
-            break;
-          case "youtube_search":
-            params.youtubeQuery = query;
-            displayMsg = "Searching YouTube now!";
+          case "sites_search":
+            if (typeof request.body.result.parameters.any !== "undefined") {
+              console.log("api.ai sites_search query: " + request.body.result.parameters.any);
+              params.siteQuery = request.body.result.parameters.any;
+            }
+            displayMsg = "Opening " + params.popSites + " now!";
+            params.siteName = request.body.result.parameters.siteName;
             break;
           case "zoom":
             var zoom = request.body.result.parameters.zoom;
@@ -270,9 +260,7 @@ exports.chromeControl = (request, response) => {
   actionMap.set("scroll_down_full", funcController);
   actionMap.set("scroll_up", funcController);
   actionMap.set("scroll_up_full", funcController);
-  actionMap.set("google_search", funcController);
-  actionMap.set("stackoverflow_search", funcController);
-  actionMap.set("youtube_search", funcController);
+  actionMap.set("sites_search", funcController);
   actionMap.set("zoom", funcController);
   actionMap.set("website_search", funcController);
   actionMap.set("create_bookmark", funcController);
