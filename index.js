@@ -195,7 +195,7 @@ exports.chromeControl = (request, response) => {
             }
             break;
           case "mute_tab":
-            var muteType = request.body.result.parameters.window;
+            var muteType = request.body.result.parameters.muteType;
             console.log("api.ai muteType query: " + muteType);
             params.muteType = muteType;
             if(muteType == "current"){
