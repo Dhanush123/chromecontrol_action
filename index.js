@@ -21,7 +21,6 @@ env("./.env");
 // [START YourAction]
 exports.chromeControl = (request, response) => {
 
-  var action = "";
   const app = new App({
     request,
     response
@@ -31,7 +30,7 @@ exports.chromeControl = (request, response) => {
   //console.log("Request headers: " + JSON.stringify(request.headers));
   console.log("Request body: " + JSON.stringify(request.body));
   console.log("api.ai action was: " + request.body.result.action);
-  action = request.body.result.action;
+  var action = request.body.result.action;
 
   var user = app.getUser();
   oauth2Client.setCredentials({
@@ -162,12 +161,9 @@ exports.chromeControl = (request, response) => {
             displayMsg = "Restoring the most recently closed window!";
             break;
           case "sites_search":
-            if (typeof request.body.result.parameters.siteQuery !== "undefined") {
-              params.siteQuery = request.body.result.parameters.siteQuery;
-              console.log("api.ai sites_search query: " + params.siteQuery);
-            }
+            params.siteQuery = request.body.result.parameters.siteQuery;
             params.siteName = request.body.result.parameters.siteName;
-            displayMsg = "Opening " + params.siteName + " now!";
+            displayMsg = "Searching " + params.siteName + " now!";
             break;
           case "zoom":
             var zoom = request.body.result.parameters.zoom;
@@ -201,6 +197,7 @@ exports.chromeControl = (request, response) => {
           default:
             app.tell("I appreciate the enthusiasm, but I don't think this is a feature my creator has given me yet! You can ask my creator to implement it by emailing the developer email found in the Browser Control Google Actions listing.");
         }
+        console.log(JSON.stringify(params));
         app.ask(displayMsg + " What else can I do for you on Chrome?",getSampleCommands());
         gRef.update(params, function(error) {
           if (error) {
