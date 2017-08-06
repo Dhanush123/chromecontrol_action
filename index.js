@@ -162,12 +162,12 @@ exports.chromeControl = (request, response) => {
             displayMsg = "Restoring the most recently closed window!";
             break;
           case "sites_search":
-            if (typeof request.body.result.parameters.any !== "undefined") {
-              console.log("api.ai sites_search query: " + request.body.result.parameters.any);
-              params.siteQuery = request.body.result.parameters.any;
+            if (typeof request.body.result.parameters.siteQuery !== "undefined") {
+              params.siteQuery = request.body.result.parameters.siteQuery;
+              console.log("api.ai sites_search query: " + params.siteQuery);
             }
-            displayMsg = "Opening " + request.body.result.parameters.siteName + " now!";
             params.siteName = request.body.result.parameters.siteName;
+            displayMsg = "Opening " + params.siteName + " now!";
             break;
           case "zoom":
             var zoom = request.body.result.parameters.zoom;
