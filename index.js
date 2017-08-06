@@ -187,23 +187,19 @@ exports.chromeControl = (request, response) => {
             var windowType = request.body.result.parameters.windowType;
             console.log("api.ai windowType query: " + windowType);
             params.windowType = windowType;
-            if(windowType == "current"){
-              displayMsg = "Closing current window now!";
-            }
-            else {
-              displayMsg = "Closing all windows now!"; //windowType is either current or all
-            }
+            displayMsg = (windowType == "current") ? "Closing current window now!" : "Closing all windows now!"; //windowType is either current or all
             break;
           case "mute_tab":
             var muteType = request.body.result.parameters.muteType;
             console.log("api.ai muteType query: " + muteType);
             params.muteType = muteType;
-            if(muteType == "current"){
-              displayMsg = "Muting current tab now!";
-            }
-            else {
-              displayMsg = "Muting all tabs in current window now!"; //muteType is either current or all
-            }
+            displayMsg = (muteType == "current") ? "Muting current tab now!" : "Muting all tabs in current window now!"; //muteType is either current or all
+            break;
+          case "unmute_tab":
+            var muteType = request.body.result.parameters.muteType;
+            console.log("api.ai muteType query: " + muteType);
+            params.muteType = muteType;
+            displayMsg = (muteType == "current") ? "Unmuting current tab now!" : "Unmuting all tabs in current window now!"; //muteType is either current or all
             break;
           default:
             app.tell("I appreciate the enthusiasm, but I don't think this is a feature my creator has given me yet! You can ask my creator to implement it by emailing the developer email found in the Browser Control Google Actions listing.");
@@ -279,6 +275,7 @@ exports.chromeControl = (request, response) => {
   actionMap.set("close_window", funcController);
   actionMap.set("restore_window", funcController);
   actionMap.set("mute_tab", funcController);
+  actionMap.set("unmute_tab", funcController);
   actionMap.set("input.welcome", greetUser);
   actionMap.set("input.unknown", unknownHandle);
   app.handleRequest(actionMap);
