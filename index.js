@@ -184,7 +184,7 @@ exports.chromeControl = (request, response) => {
             displayMsg = "Opening link " + linkNum + " now!";
             break;
           case "close_window":
-            var windowType = request.body.result.parameters.window;
+            var windowType = request.body.result.parameters.windowType;
             console.log("api.ai windowType query: " + windowType);
             params.windowType = windowType;
             if(windowType == "current"){
@@ -192,6 +192,17 @@ exports.chromeControl = (request, response) => {
             }
             else {
               displayMsg = "Closing all windows now!"; //windowType is either current or all
+            }
+            break;
+          case "mute_tab":
+            var muteType = request.body.result.parameters.window;
+            console.log("api.ai muteType query: " + muteType);
+            params.muteType = muteType;
+            if(muteType == "current"){
+              displayMsg = "Muting current tab now!";
+            }
+            else {
+              displayMsg = "Muting all tabs in current window now!"; //muteType is either current or all
             }
             break;
           default:
@@ -267,6 +278,7 @@ exports.chromeControl = (request, response) => {
   actionMap.set("remove_links", funcController);
   actionMap.set("close_window", funcController);
   actionMap.set("restore_window", funcController);
+  actionMap.set("mute_tab", funcController);
   actionMap.set("input.welcome", greetUser);
   actionMap.set("input.unknown", unknownHandle);
   app.handleRequest(actionMap);
