@@ -35,7 +35,7 @@ exports.chromeControl = (request, response) => {
   var user = app.getUser();
   oauth2Client.setCredentials({
     access_token: user.accessToken,
-    expiry_date: 1534334399000
+    expiry_date: true
   });
 
   var gUser;
