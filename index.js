@@ -191,15 +191,18 @@ exports.chromeControl = (request, response) => {
             break;
           case "mute_tab":
             var muteType = request.body.result.parameters.muteType;
-            console.log("api.ai muteType query: " + muteType);
+            console.log("api.ai muteType query (for mute): " + muteType);
             params.muteType = muteType;
             displayMsg = (muteType == "current") ? "Muting current tab now!" : "Muting all tabs in current window now!"; //muteType is either current or all
             break;
           case "unmute_tab":
             var muteType = request.body.result.parameters.muteType;
-            console.log("api.ai muteType query: " + muteType);
+            console.log("api.ai muteType query (for unmute): " + muteType);
             params.muteType = muteType;
             displayMsg = (muteType == "current") ? "Unmuting current tab now!" : "Unmuting all tabs in current window now!"; //muteType is either current or all
+            break;
+          case "invert_colors":
+            displayMsg = "Inverting colors on current tab now!";
             break;
           default:
             app.tell("I appreciate the enthusiasm, but I don't think this is a feature my creator has given me yet! You can ask my creator to implement it by emailing the developer email found in the Browser Control Google Actions listing.");
