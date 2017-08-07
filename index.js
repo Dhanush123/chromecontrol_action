@@ -25,7 +25,6 @@ exports.chromeControl = (request, response) => {
     request,
     response
   });
-  //change
 
   //console.log("Request headers: " + JSON.stringify(request.headers));
   console.log("Request body: " + JSON.stringify(request.body));
@@ -33,10 +32,10 @@ exports.chromeControl = (request, response) => {
   var action = request.body.result.action;
 
   var user = app.getUser();
-  oauth2Client.setCredentials({
-    access_token: user.accessToken,
-    expiry_date: 1534334399000
-  });
+  // oauth2Client.setCredentials({
+  //   access_token: user.accessToken,
+  //   expiry_date: 1534334399000
+  // });
 
   var gUser;
 
@@ -60,18 +59,24 @@ exports.chromeControl = (request, response) => {
   }
 
   function getGUser(opFunc, app) {
-    plus.people.get({
-      userId: "me",
-      auth: oauth2Client
-    }, function(err, res) {
-      console.log("g+ err: " + JSON.stringify(err));
-      console.log("g+ res: " + JSON.stringify(res));
-      gUser = res;
-      console.log("gUser.displayName: " + gUser.displayName);
-      console.log("gUser.emails[0].value: " + gUser.emails[0].value);
-      console.log("gUser.id: " + gUser.id);
-      if (typeof opFunc === "function") {
-        opFunc(app);
+    oauth2Client.getToken(code, function (err, tokens) {
+      // Now tokens contains an access_token and an optional refresh_token. Save them.
+      if (!err) {
+        oauth2Client.setCredentials(tokens);
+        plus.people.get({
+          userId: "me",
+          auth: oauth2Client
+        }, function(err, res) {
+          console.log("g+ err: " + JSON.stringify(err));
+          console.log("g+ res: " + JSON.stringify(res));
+          gUser = res;
+          console.log("gUser.displayName: " + gUser.displayName);
+          console.log("gUser.emails[0].value: " + gUser.emails[0].value);
+          console.log("gUser.id: " + gUser.id);
+          if (typeof opFunc === "function") {
+            opFunc(app);
+          }
+        });
       }
     });
   }
