@@ -204,6 +204,21 @@ exports.chromeControl = (request, response) => {
           case "invert_colors":
             displayMsg = "Inverting colors on current tab now!";
             break;
+          case "selective_tabclose":
+            var url = request.body.result.parameters.url;
+            console.log("api.ai selective tab close url query: " + url);
+            params.websiteUrl = url;
+            displayMsg = "Closing all tabs in current window containing " + url + "!";
+            break;
+          case "youtube_assist":
+            var youtubeStatus = request.body.result.parameters.youtubeStatus;
+            params.youtubeStatus = youtubeStatus;
+            console.log("youtubeStatus: " + youtubeStatus);
+            if(request.body.result.parameters.youtubePos >= 0) {
+              params.youtubePos = request.body.result.parameters.youtubePos;
+              console.log("youtubePos: " + youtubePos);
+            }
+            break;
           default:
             app.tell("I appreciate the enthusiasm, but I don't think this is a feature my creator has given me yet! You can ask my creator to implement it by emailing the developer email found in the Browser Control Google Actions listing.");
         }
@@ -255,7 +270,7 @@ exports.chromeControl = (request, response) => {
   }
 
   function unknownHandle(app) {
-    app.ask("I apologize. Currently I don't know to help you " + app.getRawInput() + "on Chrome. I'm constantly learning new actions, so please try again later if you intended to request that action. What other action can I help you take on Chrome?");
+    app.ask("I apologize. Currently I don't know to help you " + app.getRawInput() + " on Chrome. I'm constantly learning new actions, so please try again later if you intended to request that action. What other action can I help you take on Chrome?");
   }
 
   const actionMap = new Map();
