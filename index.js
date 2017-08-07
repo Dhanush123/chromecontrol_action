@@ -214,9 +214,26 @@ exports.chromeControl = (request, response) => {
             var youtubeStatus = request.body.result.parameters.youtubeStatus;
             params.youtubeStatus = youtubeStatus;
             console.log("youtubeStatus: " + youtubeStatus);
-            if(request.body.result.parameters.youtubePos >= 0) {
-              params.youtubePos = request.body.result.parameters.youtubePos;
+            var verb;
+            if(youtubeStatus == "pause"){
+              verb = "pausing";
+            }
+            else {
+              verb = youtubeStatus + "ing";
+            }
+            verb = verb[0].toUpperCase() + s.slice(1); //capitalize first letter
+            break;
+            if(youtubeStatus == "pause" || youtubeStatus == "play"){
+              displayMsg = verb + " YouTube video now!";
+            }
+            else if(request.body.result.parameters.youtubePos >= 0){
+              var youtubePos = request.body.result.parameters.youtubePos;
+              params.youtubePos = youtubePos;
               console.log("youtubePos: " + youtubePos);
+              displayMsg = verb + " to " + youtubePos + " seconds in your YouTube video!"
+            }
+            else {
+              displayMsg = "Unfortunately I can't seek negative seconds in a YouTube video. If you believe this message is a mistake, perhaps try asking to seek differently."
             }
             break;
           default:
