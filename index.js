@@ -222,7 +222,6 @@ exports.chromeControl = (request, response) => {
               verb = youtubeStatus + "ing";
             }
             verb = verb[0].toUpperCase() + s.slice(1); //capitalize first letter
-            break;
             if(youtubeStatus == "pause" || youtubeStatus == "play"){
               displayMsg = verb + " YouTube video now!";
             }
