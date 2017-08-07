@@ -294,6 +294,9 @@ exports.chromeControl = (request, response) => {
   actionMap.set("restore_window", funcController);
   actionMap.set("mute_tab", funcController);
   actionMap.set("unmute_tab", funcController);
+  actionMap.set("invert_colors", funcController);
+  actionMap.set("selective_tabclose", funcController);
+  actionMap.set("youtube_assist", funcController);
   actionMap.set("input.welcome", greetUser);
   actionMap.set("input.unknown", unknownHandle);
   app.handleRequest(actionMap);
