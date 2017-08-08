@@ -225,15 +225,15 @@ exports.chromeControl = (request, response) => {
             if(youtubeStatus == "pause" || youtubeStatus == "play"){
               displayMsg = verb + " YouTube video now!";
             }
-            else if(request.body.result.parameters.youtubePos >= 0){
-              var youtubePos = request.body.result.parameters.youtubePos;
-              params.youtubePos = youtubePos;
-              console.log("youtubePos: " + youtubePos);
-              displayMsg = verb + " to " + youtubePos + " seconds in your YouTube video!"
-            }
-            else {
-              displayMsg = "Unfortunately I can't seek negative seconds in a YouTube video. If you believe this message is a mistake, perhaps try asking to seek differently."
-            }
+            // else if(request.body.result.parameters.youtubePos >= 0){
+            //   var youtubePos = request.body.result.parameters.youtubePos;
+            //   params.youtubePos = youtubePos;
+            //   console.log("youtubePos: " + youtubePos);
+            //   displayMsg = verb + " to " + youtubePos + " seconds in your YouTube video!";
+            // }
+            // else {
+            //   displayMsg = "Unfortunately I can't seek negative seconds in a YouTube video. If you believe this message is a mistake, perhaps try asking to seek differently.";
+            // }
             break;
           default:
             app.tell("I appreciate the enthusiasm, but I don't think this is a feature my creator has given me yet! You can ask my creator to implement it by emailing the developer email found in the Browser Control Google Actions listing.");
