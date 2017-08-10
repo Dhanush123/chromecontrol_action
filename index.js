@@ -21,20 +21,46 @@ env("./.env");
 // [START YourAction]
 exports.chromeControl = (request, response) => {
 
+  var action = "";
   const app = new App({
     request,
     response
   });
+  //change
 
-  //console.log("Request headers: " + JSON.stringify(request.headers));
+  console.log("Request headers: " + JSON.stringify(request.headers));
   console.log("Request body: " + JSON.stringify(request.body));
   console.log("api.ai action was: " + request.body.result.action);
-  var action = request.body.result.action;
+  action = request.body.result.action;
+
+  var query;
+  if (typeof request.body.result.parameters.any !== "undefined") {
+    query = request.body.result.parameters.any;
+    console.log("api.ai [google | stackoverflow | youtube] search query: " + query);
+  }
+
+  // var zoom;
+  // if (typeof request.body.result.parameters.zoom !== "undefined") {
+  //   zoom = request.body.result.parameters.zoom;
+  //   console.log("api.ai zoom query: " + zoom);
+  // }
+
+  // var url;
+  // if (typeof request.body.result.parameters.url !== "undefined") {
+  //   url = request.body.result.parameters.url;
+  //   console.log("api.ai website search url query: " + url);
+  // }
+
+  // var linkNum;
+  // if (typeof request.body.result.parameters.link_number !== "undefined") {
+  //   linkNum = request.body.result.parameters.link_number;
+  //   console.log("api.ai linkNum query: " + linkNum);
+  // }
 
   var user = app.getUser();
+  console.log("user: "+JSON.stringify(user));
   oauth2Client.setCredentials({
-    access_token: user.accessToken,
-    expiry_date: 1534334399000
+    access_token: user.accessToken
   });
 
   var gUser;
@@ -115,8 +141,7 @@ exports.chromeControl = (request, response) => {
       console.log("snapshot: " + JSON.stringify(snapshot.val()));
       console.log("snapshot.val()[" + gUser.id + "].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
       if (!snapshot.val()[gUser.id].chromeLoggedIn) {
-        displayMsg = "Hey! It seems like you haven't installed the \"Browser Control\" Chrome Extension in your Google Chrome browser yet. Please come back after you've done that. Thank you!";
-        app.tell(displayMsg);
+        displayMsg = "Hey! It seems like you haven't installed the \"Browser Control\" Chrome Extension in your Google Chrome browser yet. Please come back after you've done that.";
       } else {
         var gRef = admin.database().ref("users/" + gUser.id);
         var params = {"command": action};
@@ -160,10 +185,17 @@ exports.chromeControl = (request, response) => {
           case "restore_window":
             displayMsg = "Restoring the most recently closed window!";
             break;
-          case "sites_search":
-            params.siteQuery = request.body.result.parameters.siteQuery;
-            params.siteName = request.body.result.parameters.siteName;
-            displayMsg = "Searching " + params.siteName + " now!";
+          case "google_search":
+            params.googleQuery = query;
+            displayMsg = "Searching Google now!";
+            break;
+          case "stackoverflow_search":
+            params.stackoverflowQuery = query;
+            displayMsg = "Searching StackOverflow now!";
+            break;
+          case "youtube_search":
+            params.youtubeQuery = query;
+            displayMsg = "Searching YouTube now!";
             break;
           case "zoom":
             var zoom = request.body.result.parameters.zoom;
@@ -184,62 +216,20 @@ exports.chromeControl = (request, response) => {
             displayMsg = "Opening link " + linkNum + " now!";
             break;
           case "close_window":
-            var windowType = request.body.result.parameters.windowType;
+            var windowType = request.body.result.parameters.window;
             console.log("api.ai windowType query: " + windowType);
             params.windowType = windowType;
-            displayMsg = (windowType == "current") ? "Closing current window now!" : "Closing all windows now!"; //windowType is either current or all
-            break;
-          case "mute_tab":
-            var muteType = request.body.result.parameters.muteType;
-            console.log("api.ai muteType query (for mute): " + muteType);
-            params.muteType = muteType;
-            displayMsg = (muteType == "current") ? "Muting current tab now!" : "Muting all tabs in current window now!"; //muteType is either current or all
-            break;
-          case "unmute_tab":
-            var muteType = request.body.result.parameters.muteType;
-            console.log("api.ai muteType query (for unmute): " + muteType);
-            params.muteType = muteType;
-            displayMsg = (muteType == "current") ? "Unmuting current tab now!" : "Unmuting all tabs in current window now!"; //muteType is either current or all
-            break;
-          case "invert_colors":
-            displayMsg = "Inverting colors on current tab now!";
-            break;
-          case "selective_tabclose":
-            var url = request.body.result.parameters.url;
-            console.log("api.ai selective tab close url query: " + url);
-            params.websiteUrl = url;
-            displayMsg = "Closing all tabs in current window containing " + url + "!";
-            break;
-          case "youtube_assist":
-            var youtubeStatus = request.body.result.parameters.youtubeStatus;
-            params.youtubeStatus = youtubeStatus;
-            console.log("youtubeStatus: " + youtubeStatus);
-            var verb;
-            if(youtubeStatus == "pause"){
-              verb = "pausing";
+            if(windowType == "current"){
+              displayMsg = "Closing current window now!";
             }
             else {
-              verb = youtubeStatus + "ing";
+              displayMsg = "Closing all windows now!"; //windowType is either current or all
             }
-            verb = verb[0].toUpperCase() + verb.slice(1); //capitalize first letter
-            if(youtubeStatus == "pause" || youtubeStatus == "play"){
-              displayMsg = verb + " YouTube video now!";
-            }
-            // else if(request.body.result.parameters.youtubePos >= 0){
-            //   var youtubePos = request.body.result.parameters.youtubePos;
-            //   params.youtubePos = youtubePos;
-            //   console.log("youtubePos: " + youtubePos);
-            //   displayMsg = verb + " to " + youtubePos + " seconds in your YouTube video!";
-            // }
-            // else {
-            //   displayMsg = "Unfortunately I can't seek negative seconds in a YouTube video. If you believe this message is a mistake, perhaps try asking to seek differently.";
-            // }
             break;
           default:
             app.tell("I appreciate the enthusiasm, but I don't think this is a feature my creator has given me yet! You can ask my creator to implement it by emailing the developer email found in the Browser Control Google Actions listing.");
         }
-        console.log(JSON.stringify(params));
-        app.ask(displayMsg + " What else can I do for you on Chrome?",getSampleCommands());
+        app.ask(displayMsg,getSampleCommands());
         gRef.update(params, function(error) {
           if (error) {
             console.log("Data could not be saved: " + error);
@@ -286,7 +276,7 @@ exports.chromeControl = (request, response) => {
   }
 
   function unknownHandle(app) {
-    app.ask("I apologize. Currently I don't know to help you " + app.getRawInput() + " on Chrome. I'm constantly learning new actions, so please try again later if you intended to request that action. What other action can I help you take on Chrome?");
+    app.ask("I apologize. Currently I don't know to help you " + app.getRawInput() + "on Chrome. I'm constantly learning new actions, so please try again later if you intended to request that action. What other action can I help you take on Chrome?");
   }
 
   const actionMap = new Map();
@@ -298,7 +288,9 @@ exports.chromeControl = (request, response) => {
   actionMap.set("scroll_down_full", funcController);
   actionMap.set("scroll_up", funcController);
   actionMap.set("scroll_up_full", funcController);
-  actionMap.set("sites_search", funcController);
+  actionMap.set("google_search", funcController);
+  actionMap.set("stackoverflow_search", funcController);
+  actionMap.set("youtube_search", funcController);
   actionMap.set("zoom", funcController);
   actionMap.set("website_search", funcController);
   actionMap.set("create_bookmark", funcController);
@@ -308,11 +300,6 @@ exports.chromeControl = (request, response) => {
   actionMap.set("remove_links", funcController);
   actionMap.set("close_window", funcController);
   actionMap.set("restore_window", funcController);
-  actionMap.set("mute_tab", funcController);
-  actionMap.set("unmute_tab", funcController);
-  actionMap.set("invert_colors", funcController);
-  actionMap.set("selective_tabclose", funcController);
-  actionMap.set("youtube_assist", funcController);
   actionMap.set("input.welcome", greetUser);
   actionMap.set("input.unknown", unknownHandle);
   app.handleRequest(actionMap);
