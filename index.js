@@ -284,6 +284,32 @@ function firebaseUpdate(userIndex, newATDets, func1, func2, app) {
               displayMsg = "Closing all windows now!"; //windowType is either current or all
             }
             break;
+          case "mute_tab":
+            var muteType = request.body.result.parameters.muteType;
+            console.log("api.ai muteType query (for mute): " + muteType);
+            params.muteType = muteType;
+            displayMsg = (muteType == "current") ? "Muting current tab now!" : "Muting all tabs in current window now!"; //muteType is either current or all
+            break;
+          case "unmute_tab":
+            var muteType = request.body.result.parameters.muteType;
+            console.log("api.ai muteType query (for unmute): " + muteType);
+            params.muteType = muteType;
+            displayMsg = (muteType == "current") ? "Unmuting current tab now!" : "Unmuting all tabs in current window now!"; //muteType is either current or all
+            break;
+          case "invert_colors":
+            displayMsg = "Inverting colors on current tab now!";
+            break;
+          case "selective_tabclose":
+            var url = request.body.result.parameters.url;
+            console.log("api.ai selective tab close url query: " + url);
+            params.websiteUrl = url;
+            displayMsg = "Closing all tabs in current window containing " + url + "!";
+            break;
+          case "youtube_assist":
+            var youtubeStatus = request.body.result.parameters.youtubeStatus;
+            params.youtubeStatus = youtubeStatus;
+            console.log("youtubeStatus: " + youtubeStatus);
+            break;
           default:
             app.tell("I appreciate the enthusiasm, but I don't think this is a feature my creator has given me yet! You can ask my creator to implement it by emailing the developer email found in the Browser Control Google Actions listing.");
         }
@@ -302,8 +328,6 @@ function firebaseUpdate(userIndex, newATDets, func1, func2, app) {
 
   function funcController(app) {
     accessTokenCheck(getGUser, checkUserInFB, app);
-    // getGUser(checkUserInFB, app);
-    //var msg = getGUser(checkUserInFB, app);
   }
 
   function getSampleCommands() {
@@ -348,8 +372,8 @@ function firebaseUpdate(userIndex, newATDets, func1, func2, app) {
   actionMap.set("scroll_down_full", funcController);
   actionMap.set("scroll_up", funcController);
   actionMap.set("scroll_up_full", funcController);
-  actionMap.set("google_search", funcController);
-  actionMap.set("stackoverflow_search", funcController);
+  // actionMap.set("google_search", funcController);
+  // actionMap.set("stackoverflow_search", funcController);
   actionMap.set("youtube_search", funcController);
   actionMap.set("zoom", funcController);
   actionMap.set("website_search", funcController);
@@ -360,6 +384,11 @@ function firebaseUpdate(userIndex, newATDets, func1, func2, app) {
   actionMap.set("remove_links", funcController);
   actionMap.set("close_window", funcController);
   actionMap.set("restore_window", funcController);
+  actionMap.set("mute_tab", funcController);
+  actionMap.set("unmute_tab", funcController);
+  actionMap.set("invert_colors", funcController);
+  actionMap.set("selective_tabclose", funcController);
+  actionMap.set("youtube_assist", funcController);
   actionMap.set("input.welcome", greetUser);
   actionMap.set("input.unknown", unknownHandle);
   app.handleRequest(actionMap);
