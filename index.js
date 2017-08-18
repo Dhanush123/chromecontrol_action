@@ -3,7 +3,7 @@
 process.env.DEBUG = "actions-on-google:*";
 const App = require("actions-on-google").ApiAiApp;
 const env = require("node-env-file");
-const reqnpm( = require('request');
+const reqnpm = require('request');
 const admin = require("firebase-admin");
 const google = require("googleapis");
 var plus = google.plus("v1");
