@@ -62,7 +62,7 @@ exports.chromeControl = (request, response) => {
   }
 
   function accessTokenCheck(func1, func2, app) {
-    reqnpm("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token="+testing, function (error, response, body) {
+    reqnpm("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token="+user.accessToken, function (error, response, body) {
       console.log('accessTokenCheck statusCode:', response && response.statusCode);
       if(error) {
         console.log('accessTokenCheck error:', error);
