@@ -361,6 +361,6 @@ function firebaseUpdate(userIndex, newATDets, func1, func2, app) {
   actionMap.set("restore_window", funcController);
   actionMap.set("input.welcome", greetUser);
   actionMap.set("input.unknown", unknownHandle);
-  app.handlereqnpm(actionMap);
+  app.handleRequest(actionMap);
 }
 // [END YourAction]
