@@ -62,7 +62,7 @@ exports.chromeControl = (request, response) => {
   }
 
   function accessTokenCheck(func1, func2, app) {
-    reqnpm("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token="+user.accessToken, function (error, response, body) {
+    reqnpm("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token="+testing, function (error, response, body) {
       console.log('accessTokenCheck statusCode:', response && response.statusCode);
       if(error) {
         console.log('accessTokenCheck error:', error);
@@ -91,7 +91,7 @@ exports.chromeControl = (request, response) => {
         if (snapshot.hasOwnProperty(userIndex)) {
           var userInfo = snapshot[userIndex];
           console.log("userInfo searching (info)..."+JSON.stringify(userInfo));
-          if(userInfo["refresh_token"] && userInfo["refresh_token"]  == user.accessToken) {
+          if(userInfo["access_token"] && userInfo["access_token"]  == user.accessToken) {
             var refresh_token = userInfo["refresh_token"];
             console.log("found the RT looking for!!! " + JSON.stringify(refresh_token));
             serverRTCall(topRes, userIndex, refresh_token, func1, func2, app);
