@@ -93,14 +93,14 @@ exports.chromeControl = (request, response) => {
           if(userInfo["refresh_token"] && userInfo["refresh_token"]  == user.accessToken) {
             var refresh_token = userInfo["refresh_token"];
             console.log("found the RT looking for!!! " + JSON.stringify(refresh_token));
-            serverRTCall(topRes, userIndex, refresh_token);
+            serverRTCall(topRes, userIndex, refresh_token, func1, func2, app);
           }
         }
       }
     });
   }
 
-function serverRTCall(userIndex, refresh_token){
+function serverRTCall(userIndex, refresh_token, func1, func2, app){
   var urlSend = 'https://authportal.herokuapp.com/?client_id='+GOOGLE_CLIENT_ID+"&client_secret="+GOOGLE_CLIENT_SECRET+"&grant_type=refresh_token="+refresh_token;
   //need to get & add refresh_token to url above
   var options = {
@@ -118,12 +118,12 @@ function serverRTCall(userIndex, refresh_token){
       //   access_token: newAToken.access_token,
       //   expiry_date : newAToken.expiry_date
       // }
-      firebaseUpdate(userIndex, body);
+      firebaseUpdate(userIndex, body, func1, func2, app);
     }
   });
 }
 
-function firebaseUpdate(userIndex, newATDets) {
+function firebaseUpdate(userIndex, newATDets, func1, func2, app) {
   var gRef = admin.database().ref("users/" + userIndex);
   gRef.update(newATDets, function(error) {
     if (error) {
@@ -131,7 +131,8 @@ function firebaseUpdate(userIndex, newATDets) {
       app.tell("Unfortunately I wasn't able to authenticate your Browser Control account. Please try again later.");
     }
     else {
-      console.log("saved new access_token to firebase inside google action!!!")
+      console.log("saved new access_token to firebase inside google action!!!");
+      func1(func2, app);
     }
   });
 }
