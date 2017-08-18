@@ -199,6 +199,7 @@ function firebaseUpdate(userIndex, newATDets, func1, func2, app) {
       console.log("snapshot.val()[" + gUser.id + "].chromeLoggedIn: " + snapshot.val()[gUser.id].chromeLoggedIn);
       if (!snapshot.val()[gUser.id].chromeLoggedIn) {
         displayMsg = "Hey! It seems like you haven't installed the \"Browser Control\" Chrome Extension in your Google Chrome browser yet. Please come back after you've done that.";
+        app.tell(displayMsg);
       } else {
         var gRef = admin.database().ref("users/" + gUser.id);
         var params = {"command": action};
