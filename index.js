@@ -69,7 +69,8 @@ exports.chromeControl = (request, response) => {
       }
       else {
         console.log('accessTokenCheck body:', body);
-        if(body.expires_in < 300) {
+        if(body.error || body.expires_in < 300) {
+          console.log("going to update access_token now!!!");
           accessTokenUpdate(func1, func2, app);
         }
         else {
