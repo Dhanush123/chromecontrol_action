@@ -3,9 +3,8 @@
 process.env.DEBUG = "actions-on-google:*";
 const App = require("actions-on-google").ApiAiApp;
 const env = require("node-env-file");
-
+const request = require('request');
 const admin = require("firebase-admin");
-
 const google = require("googleapis");
 var plus = google.plus("v1");
 var OAuth2 = google.auth.OAuth2;
@@ -39,30 +38,8 @@ exports.chromeControl = (request, response) => {
     console.log("api.ai [google | stackoverflow | youtube] search query: " + query);
   }
 
-  // var zoom;
-  // if (typeof request.body.result.parameters.zoom !== "undefined") {
-  //   zoom = request.body.result.parameters.zoom;
-  //   console.log("api.ai zoom query: " + zoom);
-  // }
-
-  // var url;
-  // if (typeof request.body.result.parameters.url !== "undefined") {
-  //   url = request.body.result.parameters.url;
-  //   console.log("api.ai website search url query: " + url);
-  // }
-
-  // var linkNum;
-  // if (typeof request.body.result.parameters.link_number !== "undefined") {
-  //   linkNum = request.body.result.parameters.link_number;
-  //   console.log("api.ai linkNum query: " + linkNum);
-  // }
-
   var user = app.getUser();
   console.log("user: "+JSON.stringify(user));
-  oauth2Client.setCredentials({
-    access_token: user.accessToken
-  });
-
   var gUser;
 
   if (admin.apps.length == 0) {
@@ -84,7 +61,86 @@ exports.chromeControl = (request, response) => {
     });
   }
 
+  function accessTokenCheck(func1, func2, app) {
+    request("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token="+user.accessToken, function (error, response, body) {
+      console.log('accessTokenCheck statusCode:', response && response.statusCode);
+      if(error) {
+        console.log('accessTokenCheck error:', error);
+      }
+      else {
+        console.log('accessTokenCheck body:', body);
+        if(body.expires_in < 300) {
+          accessTokenUpdate(func1, func2, app);
+        }
+        else {
+          func1(func2, app);
+        }
+      }
+    });
+  }
+
+  function accessTokenUpdate(func1, func2, app) {
+    var ref = admin.database().ref("users");
+    var displayMsg;
+    ref.once("value", function(snap) {
+      var snapshot = snap.val();
+      console.log("snapshot: " + JSON.stringify(snapshot));
+      for (var userIndex in snapshot) {
+        console.log("userInfo searching (index)..."+JSON.stringify(userIndex));
+        if (snapshot.hasOwnProperty(userIndex)) {
+          var userInfo = snapshot[userIndex];
+          console.log("userInfo searching (info)..."+JSON.stringify(userInfo));
+          if(userInfo["refresh_token"] && userInfo["refresh_token"]  == user.accessToken) {
+            var refresh_token = userInfo["refresh_token"];
+            console.log("found the RT looking for!!! " + JSON.stringify(refresh_token));
+            serverRTCall(topRes, userIndex, refresh_token);
+          }
+        }
+      }
+    });
+  }
+
+function serverRTCall(userIndex, refresh_token){
+  var urlSend = 'https://authportal.herokuapp.com/?client_id='+GOOGLE_CLIENT_ID+"&client_secret="+GOOGLE_CLIENT_SECRET+"&grant_type=refresh_token="+refresh_token;
+  //need to get & add refresh_token to url above
+  var options = {
+    method: 'POST',
+    url: urlSend
+  };
+  request(options, function (error, response, body) {
+    console.log('serverRTCall statusCode: ', response && response.statusCode);
+    if(error) {
+      console.log('serverRTCall error: ', error);
+    }
+    else {
+      console.log('serverRTCall body: ', body);
+      // body should be {
+      //   access_token: newAToken.access_token,
+      //   expiry_date : newAToken.expiry_date
+      // }
+      firebaseUpdate(userIndex, body);
+    }
+  });
+}
+
+funtion firebaseUpdate(userIndex, newATDets) {
+  var gRef = admin.database().ref("users/" + userIndex);
+  gRef.update(newATDets, function(error) {
+    if (error) {
+      console.log("Data could not be saved: " + error);
+      app.tell("Unfortunately I wasn't able to authenticate your Browser Control account. Please try again later.");
+    }
+    else {
+      console.log("saved new access_token to firebase inside google action!!!")
+    }
+  });
+}
+
   function getGUser(opFunc, app) {
+    //access_token check!!!
+    oauth2Client.setCredentials({
+      access_token: user.accessToken
+    });
     plus.people.get({
       userId: "me",
       auth: oauth2Client
@@ -243,7 +299,9 @@ exports.chromeControl = (request, response) => {
   }
 
   function funcController(app) {
-    var msg = getGUser(checkUserInFB, app);
+    accessTokenCheck(getGUser, checkUserInFB, app);
+    // getGUser(checkUserInFB, app);
+    //var msg = getGUser(checkUserInFB, app);
   }
 
   function getSampleCommands() {
