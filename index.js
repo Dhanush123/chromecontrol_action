@@ -3,7 +3,7 @@
 process.env.DEBUG = "actions-on-google:*";
 const App = require("actions-on-google").ApiAiApp;
 const env = require("node-env-file");
-const request = require('request');
+const reqnpm( = require('request');
 const admin = require("firebase-admin");
 const google = require("googleapis");
 var plus = google.plus("v1");
@@ -62,7 +62,7 @@ exports.chromeControl = (request, response) => {
   }
 
   function accessTokenCheck(func1, func2, app) {
-    request("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token="+user.accessToken, function (error, response, body) {
+    reqnpm("https://www.googleapis.com/oauth2/v1/tokeninfo?access_token="+user.accessToken, function (error, response, body) {
       console.log('accessTokenCheck statusCode:', response && response.statusCode);
       if(error) {
         console.log('accessTokenCheck error:', error);
@@ -107,7 +107,7 @@ function serverRTCall(userIndex, refresh_token, func1, func2, app){
     method: 'POST',
     url: urlSend
   };
-  request(options, function (error, response, body) {
+  reqnpm(options, function (error, response, body) {
     console.log('serverRTCall statusCode: ', response && response.statusCode);
     if(error) {
       console.log('serverRTCall error: ', error);
@@ -361,6 +361,6 @@ function firebaseUpdate(userIndex, newATDets, func1, func2, app) {
   actionMap.set("restore_window", funcController);
   actionMap.set("input.welcome", greetUser);
   actionMap.set("input.unknown", unknownHandle);
-  app.handleRequest(actionMap);
+  app.handlereqnpm(actionMap);
 }
 // [END YourAction]
