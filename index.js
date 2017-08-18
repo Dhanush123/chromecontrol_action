@@ -123,7 +123,7 @@ function serverRTCall(userIndex, refresh_token){
   });
 }
 
-funtion firebaseUpdate(userIndex, newATDets) {
+function firebaseUpdate(userIndex, newATDets) {
   var gRef = admin.database().ref("users/" + userIndex);
   gRef.update(newATDets, function(error) {
     if (error) {
