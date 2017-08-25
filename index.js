@@ -241,18 +241,6 @@ function firebaseUpdate(userIndex, newATDets, func1, func2, app) {
           case "restore_window":
             displayMsg = "Restoring the most recently closed window!";
             break;
-          // case "google_search":
-          //   params.googleQuery = query;
-          //   displayMsg = "Searching Google now!";
-          //   break;
-          // case "stackoverflow_search":
-          //   params.stackoverflowQuery = query;
-          //   displayMsg = "Searching StackOverflow now!";
-          //   break;
-          // case "youtube_search":
-          //   params.youtubeQuery = query;
-          //   displayMsg = "Searching YouTube now!";
-          //   break;
           case "sites_search":
             var siteQuery = request.body.result.parameters.siteQuery;
             console.log("api.ai sites_search query: " + siteQuery);
@@ -380,9 +368,6 @@ function firebaseUpdate(userIndex, newATDets, func1, func2, app) {
   actionMap.set("scroll_down_full", funcController);
   actionMap.set("scroll_up", funcController);
   actionMap.set("scroll_up_full", funcController);
-  // actionMap.set("google_search", funcController);
-  // actionMap.set("stackoverflow_search", funcController);
-  // actionMap.set("youtube_search", funcController);
   actionMap.set("zoom", funcController);
   actionMap.set("website_search", funcController);
   actionMap.set("create_bookmark", funcController);
