@@ -334,7 +334,8 @@ function firebaseUpdate(userIndex, newATDets, func1, func2, app) {
   }
 
   function funcController(app) {
-    accessTokenCheck(getGUser, checkUserInFB, app);
+    getGUser(checkUserInFB, app);
+    // accessTokenCheck(getGUser, checkUserInFB, app);
   }
 
   function getSampleCommands() {
