@@ -303,10 +303,7 @@ function firebaseUpdate(userIndex, newATDets, func1, func2, app) {
           case "youtube_assist":
             var youtubeStatus = request.body.result.parameters.youtubeStatus;
             params.youtubeStatus = youtubeStatus;
-            if youtubeStatus == "pause":
-              displayMsg = "Pausing YouTube video now!";
-            else:
-              displayMsg = "Playing YouTube video now!"
+            displayMsg = (youtubeStatus == "pause") ? "Pausing YouTube video now!" : "Playing YouTube video now!";
             console.log("youtubeStatus: " + youtubeStatus);
             break;
           default:
