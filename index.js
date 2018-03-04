@@ -369,7 +369,7 @@ function firebaseUpdate(userIndex, newATDets, func1, func2, app) {
   actionMap.set("scroll_up", funcController);
   actionMap.set("scroll_up_full", funcController);
   actionMap.set("zoom", funcController);
-  actionMap.set("website_search", funcController);
+  actionMap.set("sites_search", funcController);
   actionMap.set("create_bookmark", funcController);
   actionMap.set("reload_page", funcController);
   actionMap.set("show_links", funcController);
